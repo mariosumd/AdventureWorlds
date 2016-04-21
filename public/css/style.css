@@ -1,0 +1,17 @@
+.logo {
+    height: 50%;
+    width: 50%;
+}
+
+header {
+    margin: 2em;
+    width: 90%;
+    display: flex !important;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.btn-primary {
+    height: 20% !important;
+    margin-top: 2%;
+}

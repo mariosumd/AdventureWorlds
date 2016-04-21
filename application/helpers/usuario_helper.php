@@ -16,12 +16,12 @@ function login()
             $out .= '</div>';
         $out .= form_close();
     else:
-        $out .= '<div class="row">';
-          $out .= '<div class="col-md-2">';
+        //$out .= '<div class="row">';
+          //$out .= '<div class="col-md-2">';
                 $out .= anchor('/usuarios/login', 'Iniciar sesión',
-                                'class="btn btn-custom btn-xs" role="button"');
-          $out .= '</div>';
-        $out .= '</div>';
+                                'class="btn btn-primary btn-xs" role="button"');
+          //$out .= '</div>';
+        //$out .= '</div>';
     endif;
 
     return $out;

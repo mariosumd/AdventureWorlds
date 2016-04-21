@@ -5,6 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title><?= isset($title) ? $title : '' ?></title>
+        <?= link_tag('css/style.css') ?>
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet"
               href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
@@ -28,7 +29,9 @@
     </head>
     <body>
         <header>
-            <?= anchor('/portal/index', 'Adventure Worlds', 'class="btn btn-primary"') ?>
+            <?= anchor('/portal/index', img(array('src' => 'images/logo.png',
+                                                  'alt' => 'logo',
+                                                  'class' => 'logo'))) ?>
             <?= login() ?>
         </header>
         <?= mensajes() ?>
