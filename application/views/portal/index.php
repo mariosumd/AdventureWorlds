@@ -1,3 +1,4 @@
 <?php template_set('title', 'Inicio') ?>
-
-<h3>Hola!</h3>
+<div id="contenido">
+  <h3>Hola!</h3>
+</div>

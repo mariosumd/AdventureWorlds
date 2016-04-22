@@ -32,10 +32,17 @@
             <?= anchor('/portal/index', img(array('src' => 'images/logo.png',
                                                   'alt' => 'logo',
                                                   'class' => 'logo'))) ?>
+            <nav>
+              
+            </nav>
             <?= login() ?>
         </header>
         <?= mensajes() ?>
         <?= $contents ?>
+
+        <footer>
+          <p>Una idea de MarioSumD</p>
+        </footer>
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
                 integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"

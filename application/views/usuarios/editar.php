@@ -3,7 +3,7 @@
 <div class="container-fluid" style="padding-top:20px">
   <div class="row">
     <div class="col-md-8 col-md-offset-2">
-      <div class="panel panel-primary">
+      <div class="panel panel-custom">
         <div class="panel-heading">
           <h3 class="panel-title">Editar usuario</h3>
         </div>
@@ -15,10 +15,10 @@
           <?php endif ?>
           <?= form_open("usuarios/editar/$id") ?>
             <div class="form-group">
-              <?= form_label('Nick:', 'nick') ?>
-              <?= form_input('nick',
-                             set_value('nick', $nick, FALSE),
-                             'id="nick" class="form-control"') ?>
+              <?= form_label('Nombre:', 'nombre') ?>
+              <?= form_input('nombre',
+                             set_value('nombre', $nombre, FALSE),
+                             'id="nombre" class="form-control"') ?>
             </div>
             <div class="form-group">
               <?= form_label('Email:', 'email') ?>

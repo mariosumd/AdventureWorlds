@@ -9,23 +9,23 @@ class Usuario extends CI_Model
 
     public function borrar($id)
     {
-        return $this->db->delete('usuarios', array('id' => $id));
+        return $this->db->delete('usuarios', array('id_usuario' => $id));
     }
 
     public function por_id($id)
     {
-        $res = $this->db->get_where('v_usuarios_roles', array('id' => $id));
+        $res = $this->db->get_where('usuarios', array('id_usuario' => $id));
         return $res->num_rows() > 0 ? $res->row_array() : FALSE;
     }
 
-    public function por_nick($nick)
+    public function por_nombre($nombre)
     {
-        $res = $this->db->get_where('usuarios', array('nick' => $nick));
+        $res = $this->db->get_where('usuarios', array('nombre' => $nombre));
         return $res->num_rows() > 0 ? $res->row_array() : FALSE;
     }
 
-    public function por_nick_registrado($nick) {
-        $res = $this->db->get_where('v_usuarios_valido', array('nick' => $nick));
+    public function por_nombre_registrado($nombre) {
+        $res = $this->db->get_where('v_usuarios_valido', array('nombre' => $nombre));
         return $res->num_rows() > 0 ? $res->row_array() : FALSE;
     }
 
@@ -35,9 +35,9 @@ class Usuario extends CI_Model
         return $res->num_rows() > 0 ? $res->row_array() : FALSE;
     }
 
-    public function existe_nick($nick)
+    public function existe_nombre($nombre)
     {
-        return $this->por_nick($nick) !== FALSE;
+        return $this->por_nombre($nombre) !== FALSE;
     }
 
     public function existe_email($email)
@@ -45,8 +45,8 @@ class Usuario extends CI_Model
         return $this->por_email($email) !== FALSE;
     }
 
-    public function existe_nick_registrado($nick) {
-        return $this->por_nick_registrado($nick) !== FALSE;
+    public function existe_nombre_registrado($nombre) {
+        return $this->por_nombre_registrado($nombre) !== FALSE;
     }
 
     public function logueado()
@@ -79,29 +79,5 @@ class Usuario extends CI_Model
         $res = $this->db->query('select password from usuarios where id = ?',
                                 array($id));
         return $res->num_rows() > 0 ? $res->row_array() : FALSE;
-    }
-
-    public function juegos_comprados($id) {
-        $res = $this->db->query('select * from v_usuarios_carrito_compra '.
-                                'where id_usuario = ?', array($id));
-
-        $total = $this->db->query('select sum(v_usuarios_carrito_compra.precio) '.
-                                  'from v_usuarios_carrito_compra where id_usuario = ?',
-                                  array($id))->row_array();
-
-        $resultado = $res->num_rows() > 0 ? $res->result_array() : FALSE;
-
-        if ($resultado !== FALSE) {
-            $resultado['total'] = $total;
-        }
-
-        return $resultado;
-    }
-
-    public function juego_comprado($id_usuario, $id_juego) {
-        $res = $this->db->query('select * from carrito_compra '.
-                                'where id_usuario = ? and id_juego = ?',
-                                array($id_usuario, $id_juego));
-        return $res->num_rows() > 0 ? TRUE : FALSE;
     }
 }

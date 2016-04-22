@@ -45,3 +45,11 @@ create table fichas (
     botones      boolean,
     contenido    varchar(200)
 );
+
+drop table if exists tokens cascade;
+
+create table tokens (
+    usuario_id bigint   constraint pk_tokens primary key
+                        constraint fk_tokens_usuarios references usuarios (id_usuario),
+    token      char(32) not null
+);

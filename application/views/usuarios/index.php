@@ -2,7 +2,7 @@
 
 <div class="row">
   <div class="col-md-8 col-md-offset-2">
-    <div class="panel panel-primary">
+    <div class="panel panel-custom">
       <div class="panel-heading">
         <h3 class="panel-title">Listado de usuarios</h3>
       </div>
@@ -10,14 +10,14 @@
         <table border="1"
                class="table table-striped table-bordered table-hover table-condensed">
           <thead>
-            <th>Nick</th>
+            <th>Nombre</th>
             <th>Rol</th>
             <th colspan="2">Acciones</th>
           </thead>
           <tbody>
             <?php foreach ($filas as $fila): ?>
               <tr>
-                <td><?= $fila['nick'] ?></td>
+                <td><?= $fila['nombre'] ?></td>
                 <td><?= $fila['descripcion'] ?></td>
                 <td align="center">
                   <?= anchor('/usuarios/borrar/' . $fila['id'], 'Borrar',

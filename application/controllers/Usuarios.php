@@ -4,8 +4,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Usuarios extends CI_Controller {
     private $reglas_comunes = array(
         array(
-            'field' => 'nick',
-            'label' => 'Nick',
+            'field' => 'nombre',
+            'label' => 'Nombre',
             'rules' => 'trim|required|max_length[15]'
         ),
         array(
@@ -38,20 +38,20 @@ class Usuarios extends CI_Controller {
 
         if ($this->input->post('login') !== NULL)
         {
-            $nick = $this->input->post('nick');
+            $nombre = $this->input->post('nombre');
 
             $reglas = array(
                 array(
-                    'field' => 'nick',
-                    'label' => 'Nick',
+                    'field' => 'nombre',
+                    'label' => 'nombre',
                     'rules' => array(
                         'trim', 'required',
-                        array('existe_nick', array($this->Usuario, 'existe_nick')),
-                        array('existe_nick_registrado', array($this->Usuario, 'existe_nick_registrado'))
+                        array('existe_nombre', array($this->Usuario, 'existe_nombre')),
+                        array('existe_nombre_registrado', array($this->Usuario, 'existe_nombre_registrado'))
                     ),
                     'errors' => array(
-                        'existe_nick' => 'El nick debe existir.',
-                        'existe_nick_registrado' => 'Esta cuenta todavia no ha sido validada por' .
+                        'existe_nombre' => 'El nombre debe existir.',
+                        'existe_nombre_registrado' => 'Esta cuenta todavia no ha sido validada por' .
                                                     ' los medios correspondientes. Por favor, ' .
                                                     'valide su cuenta.'
                     ),
@@ -59,17 +59,17 @@ class Usuarios extends CI_Controller {
                 array(
                     'field' => 'password',
                     'label' => 'Contraseña',
-                    'rules' => "trim|required|callback__password_valido[$nick]"
+                    'rules' => "trim|required|callback__password_valido[$nombre]"
                 )
             );
 
             $this->form_validation->set_rules($reglas);
             if ($this->form_validation->run() === TRUE)
             {
-                $usuario = $this->Usuario->por_nick($nick);
+                $usuario = $this->Usuario->por_nombre($nombre);
                 $this->session->set_userdata('usuario', array(
                     'id' => $usuario['id'],
-                    'nick' => $nick,
+                    'nombre' => $nombre,
                     'rol_id' => $usuario['rol_id']
                 ));
 
@@ -218,17 +218,17 @@ class Usuarios extends CI_Controller {
         {
             $reglas = $this->reglas_comunes;
             $reglas[0] = array(
-                            'field' => 'nick',
-                            'label' => 'Nick',
+                            'field' => 'nombre',
+                            'label' => 'nombre',
                             'rules' => array(
                                 'trim', 'required',
-                                array('existe_nick', function ($nick) {
-                                        return !$this->Usuario->existe_nick($nick);
+                                array('existe_nombre', function ($nombre) {
+                                        return !$this->Usuario->existe_nombre($nombre);
                                     }
                                 )
                             ),
                             'errors' => array(
-                                'existe_nick' => 'El nick ya existe, por favor, escoja otro.',
+                                'existe_nombre' => 'El nombre ya existe, por favor, escoja otro.',
                             )
                         );
             $reglas[1] = array(
@@ -261,8 +261,8 @@ class Usuarios extends CI_Controller {
 
                 $this->load->model('Token');
                 # Prepara correo
-                $usuario = $this->Usuario->por_nick($valores['nick']);
-                $usuario_id = $usuario['id'];
+                $usuario = $this->Usuario->por_nombre($valores['nombre']);
+                $usuario_id = $usuario['id_usuario'];
 
                 ################################################################
 
@@ -294,12 +294,12 @@ class Usuarios extends CI_Controller {
         if ($this->input->post('recordar') !== NULL) {
             $reglas = array(
                 array(
-                    'field' => 'nick',
-                    'label' => 'Nick',
+                    'field' => 'nombre',
+                    'label' => 'nombre',
                     'rules' => array(
                         'trim',
                         'required',
-                        array('existe_usuario', array($this->Usuario, 'existe_nick')
+                        array('existe_usuario', array($this->Usuario, 'existe_nombre')
                         )
                     ),
                     'errors' => array(
@@ -311,8 +311,8 @@ class Usuarios extends CI_Controller {
             if ($this->form_validation->run() !== FALSE) {
                 # Preparar correo
 
-                $nick = $this->input->post('nick');
-                $usuario = $this->Usuario->por_nick($nick);
+                $nombre = $this->input->post('nombre');
+                $usuario = $this->Usuario->por_nombre($nombre);
                 $usuario_id = $usuario['id'];
                 $email = $usuario['email'];
 
@@ -396,7 +396,7 @@ class Usuarios extends CI_Controller {
         if ($this->input->post('insertar') !== NULL)
         {
             $reglas = $this->reglas_comunes;
-            $reglas[0]['rules'] .= '|is_unique[usuarios.nick]';
+            $reglas[0]['rules'] .= '|is_unique[usuarios.nombre]';
             $this->form_validation->set_rules($reglas);
             if ($this->form_validation->run() !== FALSE)
             {
@@ -422,7 +422,7 @@ class Usuarios extends CI_Controller {
         if ($this->input->post('editar') !== NULL)
         {
             $reglas = $this->reglas_comunes;
-            $reglas[0]['rules'] .= "|callback__nick_unico[$id]";
+            $reglas[0]['rules'] .= "|callback__nombre_unico[$id]";
             $reglas[] = $this->array_password_anterior;
             $reglas[sizeof($reglas)-1]['rules'] .= "|callback__password_anterior_correcto[$id]";
             $this->form_validation->set_rules($reglas);
@@ -481,8 +481,8 @@ class Usuarios extends CI_Controller {
         }
     }
 
-    public function _password_valido($password, $nick) {
-        $usuario = $this->Usuario->por_nick($nick);
+    public function _password_valido($password, $nombre) {
+        $usuario = $this->Usuario->por_nombre($nombre);
 
         if ($usuario !== FALSE &&
             password_verify($password, $usuario['password']) === TRUE)
@@ -521,9 +521,9 @@ class Usuarios extends CI_Controller {
         }
     }
 
-    public function _nick_unico($nick, $id)
+    public function _nombre_unico($nombre, $id)
     {
-        $res = $this->Usuario->por_nick($nick);
+        $res = $this->Usuario->por_nombre($nombre);
 
         if ($res === FALSE || $res['id'] === $id)
         {
@@ -531,7 +531,7 @@ class Usuarios extends CI_Controller {
         }
         else
         {
-            $this->form_validation->set_message('_nick_unico',
+            $this->form_validation->set_message('_nombre_unico',
                 'El {field} debe ser único.');
             return FALSE;
         }

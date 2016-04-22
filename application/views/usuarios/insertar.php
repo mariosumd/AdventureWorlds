@@ -14,9 +14,9 @@
         <?php endif ?>
         <?= form_open('usuarios/insertar') ?>
           <div class="form-group">
-            <?= form_label('Nick:', 'nick') ?>
-            <?= form_input('nick', set_value('nick', '', FALSE),
-                           'id="nick" class="form-control"') ?>
+            <?= form_label('Nombre:', 'nombre') ?>
+            <?= form_input('nombre', set_value('nombre', '', FALSE),
+                           'id="nombre" class="form-control"') ?>
           </div>
           <div class="form-group">
             <?= form_label('Email:', 'email') ?>
