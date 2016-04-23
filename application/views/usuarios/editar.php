@@ -1,4 +1,4 @@
-<?php template_set('title', 'Editar un usuario') ?>
+<?php portal_template_set('title', 'Editar un usuario') ?>
 
 <div class="container-fluid" style="padding-top:20px">
   <div class="row">

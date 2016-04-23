@@ -1,6 +1,9 @@
+/*
+    azul: #0093c6
+    lila: #cc86bf
+*/
+
 body, html {
-  margin: 0;
-  padding: 0;
   height: 100%;
 }
 
@@ -10,20 +13,44 @@ body {
   background: -o-linear-gradient(#000, #D8D8D8);
   background: -moz-linear-gradient(#000, #D8D8D8);
   background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover !important;
+  color: inherit;
 }
 
 header {
     margin: 1em;
-    width: 97%;
+    width: 90%;
     display: flex !important;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-around;
     background-color: #D8D8D8;
+    color: inherit;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+header > a:hover {
+    text-decoration: none;
+}
+
+header > a > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+
+header h1, header h2, #contenido h4 {
+    font-family: 'Press Start 2P';
+    background-color: inherit;
+    color: #0093c6;
+    text-shadow: 2px 2px #000000;
 }
 
 .logo {
-    height: 50%;
-    width: 50%;
+    height: 70%;
+    width: 70%;
 }
 
 .btn-primary {
@@ -34,12 +61,53 @@ header {
 
 div#contenido {
   margin: 1em;
-  width: 97%;
+  width: 90%;
   background-color: #D8D8D8;
+  color: inherit;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 1em;
+}
+
+#contenido p {
+    font-size: 1.2em;
 }
 
 footer {
   margin: 1em;
-  width: 97%;
+  width: 90%;
   background-color: #D8D8D8;
+  color: inherit;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex !important;
+  flex-direction: row;
+  justify-content: center;
+}
+
+footer > a {
+    background-color: inherit;
+    color: #0093c6;
+    font-weight: bold;
+    margin: 0.7em;
+    padding-right: 1.2em;
+    border-right: 3px solid #0093c6;
+}
+
+footer > a:hover {
+    text-decoration: none;
+}
+
+footer > a:last-child {
+    border-right: none;
+}
+
+.panel-heading {
+    background-color: #0093c6 !important;
+    color: white;
+}
+
+.panel-custom {
+    background-color: #D8D8D8 !important;
+    color: inherit;
 }

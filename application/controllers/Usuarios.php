@@ -92,14 +92,12 @@ class Usuarios extends CI_Controller {
                             parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PATH));
         }
         $this->output->delete_cache('/portal/index');
-        $this->template->load('usuarios/login');
+        $this->portal_template->load('usuarios/login');
     }
 
     public function logout() {
         $this->output->delete_cache('/portal/index');
         $this->session->sess_destroy();
-        $mensajes[] = array('info' => "Sesión cerrada.");
-        $this->flashdata->load($mensajes);
         redirect('usuarios/login');
     }
 
@@ -128,7 +126,7 @@ class Usuarios extends CI_Controller {
 
     public function index() {
         $data['filas'] = $this->Usuario->todos();
-        $this->template->load('usuarios/index', $data);
+        $this->portal_template->load('usuarios/index', $data);
     }
 
     public function perfil($id = NULL) {
@@ -139,7 +137,7 @@ class Usuarios extends CI_Controller {
             redirect('usuarios/login');
         }
         $usuario = $this->Usuario->por_id($id);
-        $this->template->load('usuarios/perfil', $usuario);
+        $this->portal_template->load('usuarios/perfil', $usuario);
     }
 
     public function foto($id = NULL) {
@@ -176,7 +174,7 @@ class Usuarios extends CI_Controller {
                 redirect('usuarios/perfil/' . $id);
             }
         }
-        $this->template->load('usuarios/foto', $data);
+        $this->portal_template->load('usuarios/foto', $data);
     }
 
     public function validar($usuario_id = NULL, $token = NULL) {
@@ -287,7 +285,7 @@ class Usuarios extends CI_Controller {
                 }
             }
         }
-        $this->template->load('usuarios/registrar');
+        $this->portal_template->load('usuarios/registrar');
     }
 
     public function recordar() {
@@ -339,7 +337,7 @@ class Usuarios extends CI_Controller {
             }
         }
 
-        $this->template->load('/usuarios/recordar');
+        $this->portal_template->load('/usuarios/recordar');
     }
 
     public function regenerar($usuario_id = NULL, $token = NULL) {
@@ -388,7 +386,7 @@ class Usuarios extends CI_Controller {
             'usuario_id' => $usuario_id,
             'token' => $token
         );
-        $this->template->load('usuarios/regenerar', $data);
+        $this->portal_template->load('usuarios/regenerar', $data);
     }
 
     public function insertar()
@@ -407,7 +405,7 @@ class Usuarios extends CI_Controller {
             }
         }
         $data['roles'] = $this->Rol->lista();
-        $this->template->load('usuarios/insertar', $data);
+        $this->portal_template->load('usuarios/insertar', $data);
     }
 
     public function editar($id = NULL)
@@ -445,7 +443,7 @@ class Usuarios extends CI_Controller {
             unset($data['password']);
         }
         $data['roles'] = $this->Rol->lista();
-        $this->template->load('usuarios/editar', $data);
+        $this->portal_template->load('usuarios/editar', $data);
     }
 
     public function borrar($id = NULL)
@@ -475,7 +473,7 @@ class Usuarios extends CI_Controller {
                 else
                 {
                     $data = $res;
-                    $this->template->load('usuarios/borrar', $data);
+                    $this->portal_template->load('usuarios/borrar', $data);
                 }
             }
         }

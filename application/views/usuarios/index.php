@@ -1,4 +1,4 @@
-<?php template_set('title', 'Listado de usuarios') ?>
+<?php portal_template_set('title', 'Listado de usuarios') ?>
 
 <div class="row">
   <div class="col-md-8 col-md-offset-2">

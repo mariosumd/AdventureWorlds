@@ -1,4 +1,4 @@
-<?php template_set('title', 'Perfil') ?>
+<?php portal_template_set('title', 'Perfil') ?>
 
 <div class="container-fluid" style="padding-top:20px">
   <div class="row">

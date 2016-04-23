@@ -3,9 +3,7 @@
 function mensajes() {
     $CI =& get_instance();
     $mensajes = $CI->session->flashdata('mensajes');
-
     $out = "";
-
     if($mensajes !== NULL) {
         foreach ($mensajes as $mensaje) {
             foreach ($mensaje as $clave => $valor) break;
@@ -20,5 +18,18 @@ function mensajes() {
         }
     }
 
+    return $out;
+}
+
+function contenido($contents) {
+    $CI =& get_instance();
+    //echo $CI->uri->rsegment(1); die();
+    if ($CI->uri->rsegment(1) !== 'usuarios' ) {
+        $out = '<div id="contenido">';
+            $out .= $contents;
+        $out .= "</div>";
+    } else {
+        $out = $contents;
+    }
     return $out;
 }

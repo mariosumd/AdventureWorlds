@@ -1,4 +1,3 @@
-<?php template_set('title', 'Inicio') ?>
-<div id="contenido">
-  <h3>Hola!</h3>
-</div>
+<?php portal_template_set('title', 'Inicio') ?>
+
+<h3>Hola!</h3>

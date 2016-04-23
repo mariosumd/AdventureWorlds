@@ -1,4 +1,4 @@
-<?php template_set('title', 'Borrar un usuario') ?>
+<?php portal_template_set('title', 'Borrar un usuario') ?>
 
 <h3>¿Seguro que desea borrar el siguiente usuario?</h3>
 <p><?= $nombre ?> (<?= $descripcion ?>)</p>

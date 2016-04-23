@@ -1,4 +1,4 @@
-<?php template_set('title', 'Regenerar') ?>
+<?php portal_template_set('title', 'Regenerar') ?>
 
 <div class="container-fluid" style="padding-top:20px">
   <div class="row">
