@@ -33,7 +33,7 @@ class Usuarios extends CI_Controller {
 
     public function login() {
         if ($this->Usuario->logueado()) {
-            redirect('portal/juegos');
+            redirect('portal/index');
         }
 
         if ($this->input->post('login') !== NULL)
@@ -81,7 +81,7 @@ class Usuarios extends CI_Controller {
                 }
                 else
                 {
-                    redirect('portal/juegos');
+                    redirect('portal/index');
                 }
             }
         }
@@ -91,14 +91,16 @@ class Usuarios extends CI_Controller {
             $this->session->set_userdata('last_uri',
                             parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PATH));
         }
-        $this->output->delete_cache('/portal/juegos');
+        $this->output->delete_cache('/portal/index');
         $this->template->load('usuarios/login');
     }
 
     public function logout() {
-        $this->output->delete_cache('/portal/juegos');
+        $this->output->delete_cache('/portal/index');
         $this->session->sess_destroy();
-        redirect('portal/juegos');
+        $mensajes[] = array('info' => "Sesión cerrada.");
+        $this->flashdata->load($mensajes);
+        redirect('usuarios/login');
     }
 
     public function __construct() {
@@ -115,13 +117,11 @@ class Usuarios extends CI_Controller {
                                        'validar', 'perfil', 'foto'))) {
             if ( ! $this->Usuario->es_admin())
             {
-                $mensajes = $this->session->flashdata('mensajes');
-                $mensajes = isset($mensajes) ? $mensajes : array();
                 $mensajes[] = array('error' =>
                     "No tiene permisos para acceder a esta parte de la aplicación");
-                $this->session->set_flashdata('mensajes', $mensajes);
+                $this->flashdata->load($mensajes);
 
-                redirect('portal/juegos');
+                redirect('portal/index');
             }
         }
     }
@@ -271,20 +271,20 @@ class Usuarios extends CI_Controller {
                                  $this->Token->generar($usuario_id));
 
                 $this->load->library('email');
-                $this->email->from('steamClase@gmail.com');
+                $this->email->from('adventureworldsdaw@gmail.com');
                 $this->email->to($valores['email']);
                 $this->email->subject('Confirmar Registro');
                 $this->email->message($enlace);
-                $this->email->send();
+                if (!$this->email->send()) {
+                    show_error($this->email->print_debugger());
+                }
+                else {
+                    $mensajes[] = array('info' =>
+                            "Confirme su cuenta a traves de su correo electrónico.");
+                    $this->flashdata->load($mensajes);
 
-                ################################################################
-
-                $mensajes[] = array('info' =>
-                        "Confirme su cuenta a traves de su correo electrónico.");
-
-                $this->flashdata->load($mensajes);
-
-                redirect('usuarios/login');
+                    redirect('usuarios/login');
+                }
             }
         }
         $this->template->load('usuarios/registrar');
@@ -313,7 +313,7 @@ class Usuarios extends CI_Controller {
 
                 $nombre = $this->input->post('nombre');
                 $usuario = $this->Usuario->por_nombre($nombre);
-                $usuario_id = $usuario['id'];
+                $usuario_id = $usuario['id_usuario'];
                 $email = $usuario['email'];
 
                 $this->load->model('Token');
@@ -323,7 +323,7 @@ class Usuarios extends CI_Controller {
                 # Mandar correo
 
                 $this->load->library('email');
-                $this->email->from('steamClase@gmail.com');
+                $this->email->from('adventureworldsdaw@gmail.com');
                 $this->email->to($email);
                 $this->email->subject('Regenerar Contraseña');
                 $this->email->message($enlace);

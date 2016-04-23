@@ -25,7 +25,7 @@ class Usuario extends CI_Model
     }
 
     public function por_nombre_registrado($nombre) {
-        $res = $this->db->get_where('v_usuarios_valido', array('nombre' => $nombre));
+        $res = $this->db->get_where('v_usuarios_verificados', array('nombre' => $nombre));
         return $res->num_rows() > 0 ? $res->row_array() : FALSE;
     }
 
@@ -56,7 +56,7 @@ class Usuario extends CI_Model
 
     public function es_admin() {
         $usuario = $this->session->userdata("usuario");
-        return $usuario['rol_id'] === '1';
+        return $usuario['admin'] === TRUE;
     }
 
     public function insertar($valores)
@@ -66,17 +66,17 @@ class Usuario extends CI_Model
 
     public function editar($valores, $id)
     {
-        return $this->db->where('id', $id)->update('usuarios', $valores);
+        return $this->db->where('id_usuario', $id)->update('usuarios', $valores);
     }
 
     public function actualizar_password($id, $nueva_password) {
-        return $this->db->query("update usuarios set password = ? where id::text = ?",
+        return $this->db->query("update usuarios set password = ? where id_usuario::text = ?",
                           array($nueva_password, $id));
     }
 
     public function password($id)
     {
-        $res = $this->db->query('select password from usuarios where id = ?',
+        $res = $this->db->query('select password from usuarios where id_usuario = ?',
                                 array($id));
         return $res->num_rows() > 0 ? $res->row_array() : FALSE;
     }

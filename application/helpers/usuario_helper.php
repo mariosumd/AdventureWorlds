@@ -10,9 +10,9 @@ function login()
         $usuario = $CI->session->userdata('usuario');
         $out .= form_open('usuarios/logout', 'class="form-inline"');
             $out .= '<div class="form-group">';
-                $out .= anchor('/usuarios/perfil/' . $usuario['id'], $usuario['nick'], '');
+                $out .= $usuario['nombre'];
                 $out .= form_submit('logout', 'Logout',
-                                    'id="logout" class="btn btn-custom btn-xs"');
+                                    'id="logout" class="btn btn-primary btn-xs"');
             $out .= '</div>';
         $out .= form_close();
     else:

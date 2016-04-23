@@ -53,3 +53,8 @@ create table tokens (
                         constraint fk_tokens_usuarios references usuarios (id_usuario),
     token      char(32) not null
 );
+
+create view v_usuarios_verificados as
+    select *
+    from usuarios
+    where registro_verificado = true;
