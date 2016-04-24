@@ -70,7 +70,42 @@ div#contenido {
 }
 
 #contenido p {
-    font-size: 1.2em;
+    font-size: 1.5em;
+    width: 75%;
+}
+
+p.small {
+    font-size: 1em !important;
+}
+
+img.about {
+    height: 150px;
+    width: 250px;
+    margin-left: 1em;
+}
+
+h4 + div {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
+input.contacta, textarea.contacta {
+    resize: none;
+}
+
+div.contacta {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+div.feedback, div.form { width: 45%; }
+
+div.feedback > img {
+    display:block;
+    margin:auto;
 }
 
 footer {
