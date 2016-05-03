@@ -9,7 +9,7 @@ function mensajes() {
             foreach ($mensaje as $clave => $valor) break;
             $clase = ($clave === 'error') ? 'alert-danger' : 'alert-success';
             $out .= '<div class="row">';
-                $out .= '<div class="col-md-8 col-md-offset-2">';
+                $out .= '<div class="col-md-11 col-md-offset-0">';
                     $out .= '<div class="alert ' . $clase . '" role="alert">';
                         $out .= $valor;
                     $out .= '</div>';
@@ -18,18 +18,5 @@ function mensajes() {
         }
     }
 
-    return $out;
-}
-
-function contenido($contents) {
-    $CI =& get_instance();
-    //echo $CI->uri->rsegment(1); die();
-    if ($CI->uri->rsegment(1) !== 'usuarios' ) {
-        $out = '<div id="contenido">';
-            $out .= $contents;
-        $out .= "</div>";
-    } else {
-        $out = $contents;
-    }
     return $out;
 }

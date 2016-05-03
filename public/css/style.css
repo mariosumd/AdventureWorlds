@@ -1,7 +1,13 @@
 /*
     azul: #0093c6
     lila: #cc86bf
+    gris: #D8D8D8
 */
+
+* {
+    margin: 0px;
+    padding: 0px;
+}
 
 body, html {
   height: 100%;
@@ -41,11 +47,18 @@ header > a > div {
     text-align: center;
 }
 
-header h1, header h2, #contenido h4 {
+header h1, header h2 {
     font-family: 'Press Start 2P';
     background-color: inherit;
     color: #0093c6;
     text-shadow: 2px 2px #000000;
+}
+
+#contenido h3, #contenido h4 {
+    font-family: 'Candal';
+    background-color: inherit;
+    color: #0093c6;
+    text-shadow: 1px 1px #000000;
 }
 
 .logo {
@@ -55,8 +68,6 @@ header h1, header h2, #contenido h4 {
 
 .btn-primary {
     height: 20% !important;
-    margin-top: 4em;
-    margin-right: 3em;
 }
 
 div#contenido {
@@ -84,7 +95,7 @@ img.about {
     margin-left: 1em;
 }
 
-h4 + div {
+h3 + div {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
@@ -137,12 +148,44 @@ footer > a:last-child {
     border-right: none;
 }
 
-.panel-heading {
-    background-color: #0093c6 !important;
-    color: white;
-}
+
+.panel-heading {background-color: #0093c6 !important;}
+.panel-heading > h3 {color: white !important;}
 
 .panel-custom {
     background-color: #D8D8D8 !important;
+    box-shadow: 2px 2px 6px #0093c6, -2px -2px 6px #0093c6 !important;
+    border: 0 !important;
     color: inherit;
 }
+
+.row {
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+.user {
+    display: flex;
+    flex-direction: row;
+    margin-top: 4em;
+    margin-right: 2em;
+}
+
+.user > label { margin-right: 0.5em; }
+#contenido > a { text-decoration: none; }
+
+.creador {
+    padding: 0;
+    text-decoration: none;
+    border: 1px solid black;
+    border-radius: 25px;
+    text-align: center;
+    width: 40%;
+    margin: auto;
+    background: linear-gradient(#888 0%, #FFF 50%, #888 100%);
+    background: -webkit-linear-gradient(#888 0%, #FFF 50%, #888 100%);
+    background: -moz-linear-gradient(#888 0%, #FFF 50%, #888 100%);
+    background: -o-linear-gradient(#888 0%, #FFF 50%, #888 100%);
+}
+
+.creador > h3 {margin-top: 0.5em;}

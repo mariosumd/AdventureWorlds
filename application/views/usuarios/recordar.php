@@ -5,7 +5,7 @@
     <div class="col-md-4 col-md-offset-4">
       <div class="panel panel-custom">
         <div class="panel-heading">
-          <h3 class="panel-title">Login</h3>
+          <h3 class="panel-title">Recordar Contraseña</h3>
         </div>
         <div class="panel-body">
           <?php if ( ! empty(error_array())): ?>

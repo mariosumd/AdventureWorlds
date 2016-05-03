@@ -1,6 +1,6 @@
 <?php portal_template_set('title', 'Sobre nosotros') ?>
 
-<h4>¿Quiénes somos?</h4>
+<h3>¿Quiénes somos?</h3>
 <div>
     <p>
         Mejor dicho, soy. Futuro desarrollador de aplicaciones, de Sanlúcar de
@@ -11,7 +11,7 @@
                   'alt'   => 'IES Doñana')) ?>
 </div>
 
-<h4>¿Qué nos apasiona?</h4>
+<h3>¿Qué nos apasiona?</h3>
 <div>
     <p>
         Al ser una persona muy perfeccionista en lo técnico, la programación es un
@@ -23,7 +23,7 @@
                   'alt'   => 'Programación')) ?>
 </div>
 
-<h4>¿Qué ofrecemos?</h4>
+<h3>¿Qué ofrecemos?</h3>
 <div>
     <p>
         De toda la vida han existido los libros tipo "elige tu propia aventura",

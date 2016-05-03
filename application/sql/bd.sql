@@ -34,15 +34,22 @@ create table juegos (
 drop table if exists fichas cascade;
 
 create table fichas (
-    id_ficha     bigserial   constraint pk_fichas primary key,
+    id_ficha     bigint   constraint pk_fichas primary key,
     id_juego     bigint      constraint fk_fichas_juegos
                                         references juegos (id_juego),
     id_anterior  bigint      constraint fk_ficha_anterior
                                         references fichas (id_ficha),
     id_siguiente bigint      constraint fk_ficha_siguiente
                                         references fichas (id_ficha),
-    final        boolean,
-    botones      boolean,
+    final        boolean default false,
+    botones      boolean default false,
+    cont_boton1  varchar(10),
+    cont_boton2  varchar(10),
+    color_boton  varchar(10),
+    color_ficha  varchar(10),
+    imagen       boolean default false,
+    jefe         boolean default false,
+    jefe_anim    boolean default false,
     contenido    varchar(200)
 );
 

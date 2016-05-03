@@ -9,22 +9,37 @@ function login()
     if ($CI->Usuario->logueado()):
         $usuario = $CI->session->userdata('usuario');
         $out .= form_open('usuarios/logout', 'class="form-inline"');
-            $out .= '<div class="form-group">';
-                $out .= $usuario['nombre'];
+            $out .= '<div class="user">';
+                $out .= form_label($usuario['nombre']);
                 $out .= form_submit('logout', 'Logout',
                                     'id="logout" class="btn btn-primary btn-xs"');
             $out .= '</div>';
         $out .= form_close();
     else:
-        //$out .= '<div class="row">';
-          //$out .= '<div class="col-md-2">';
-                $out .= anchor('/usuarios/login', 'Iniciar sesión',
-                                'class="btn btn-primary btn-xs" role="button"');
-          //$out .= '</div>';
-        //$out .= '</div>';
+        $out .= '<div class="user">';
+            $out .= anchor('/usuarios/login', 'Iniciar sesión',
+                            'class="btn btn-primary btn-xs" role="button"');
+        $out .= '</div>';
     endif;
 
     return $out;
+}
+
+function crear() {
+  $CI =& get_instance();
+
+  $out = "";
+
+  if ($CI->Usuario->logueado()):
+      $usuario = $CI->session->userdata('usuario');
+      $div  = '<div class="creador">';
+        $div .= '<h3>Crea YA tu aventura</h3>';
+        $div .= '<h4>Clica aquí para empezar</h4>';
+      $div .= '</div>';
+      $out .= anchor('creador/index', $div);
+  endif;
+
+  return $out;
 }
 
 function usuario_id()

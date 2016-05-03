@@ -1,7 +1,7 @@
 <?php portal_template_set('title', 'Contacta') ?>
 <div class="contacta">
     <div class="form">
-        <h4>Completa el siguiente formulario para contactar</h4>
+        <h3>Completa el siguiente formulario para contactar</h3>
         <?php if ( ! empty(error_array())): ?>
           <div class="alert alert-danger" role="alert">
             <?= validation_errors() ?>
@@ -31,7 +31,7 @@
     </div>
 
     <div class="feedback">
-        <h4>¡Necesitamos tus comentarios!</h4>
+        <h3>¡Necesitamos tus comentarios!</h3>
         <p>
             El "feedback" siempre es necesario. Si tienes alguna idea, comentario,
             o has encontrado un bug, no dudes en hacérnoslo saber.
