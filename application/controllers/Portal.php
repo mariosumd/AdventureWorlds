@@ -4,7 +4,8 @@ class Portal extends CI_Controller {
 
     public function index()
     {
-        $this->portal_template->load('portal/index');
+        $this->portal_template->load('portal/index',
+            array('id_usuario' => $this->session->userdata('usuario')['id']));
     }
 
     public function sobre() {
@@ -28,7 +29,7 @@ class Portal extends CI_Controller {
                 array(
                     'field' => 'comentario',
                     'label' => 'Comentario',
-                    'rules' => 'trim|required|max_length[200]'
+                    'rules' => 'trim|required|max_length[500]'
                 )
             );
 

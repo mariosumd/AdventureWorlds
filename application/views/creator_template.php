@@ -52,6 +52,7 @@
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="<?= base_url() ?>js/jquery.color-2.1.2.min.js"></script>
+        <script src="<?= base_url() ?>js/jquery.cookie.js"></script>
         <!--<script id="rating" src="<?= base_url() ?>js/star-rating.min.js" type="text/javascript"></script>-->
         <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css" />
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
@@ -60,9 +61,11 @@
         <script>
             var id_ficha;
             var id_juego;
+            var id_usuario;
             <?= nuevo_juego() ?>
 
             $(document).ready(function() {
+                $('#logout').on("click", delCookie);
                 $('.colFon span').on('click', colorFondo);
                 $('.colBot span').on('click', colorBotones);
                 $('.numBot span').on('click', numBotones);
@@ -76,7 +79,22 @@
                 $(window).on('unload', borraJuego);
                 idFicha();
                 botonAtras('none');
+                cookie();
             });
+
+            function cookie() {
+                <?php if (logueado()): ?>
+                    if (!$.cookie('usuario')) {
+                        $.cookie('usuario', <?= $usuario_id ?>);
+                    }
+
+                    id_usuario = <?= $usuario_id ?>
+                <?php endif; ?>
+            }
+
+            function delCookie() {
+                $.removeCookie('usuario');
+            }
 
             function confirmarSalida() {
                 return 'Si sales de la página sin terminar el juego, se borrará.'+

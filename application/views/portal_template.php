@@ -51,9 +51,29 @@
         <!--<?= link_tag('css/star-rating.min.css') ?>-->
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="<?= base_url() ?>js/jquery.cookie.js"></script>
+        <script src="<?= base_url() ?>js/validator.js"></script>
         <!--<script id="rating" src="<?= base_url() ?>js/star-rating.min.js" type="text/javascript"></script>-->
     </head>
     <body>
+        <script>
+            $(document).ready(function() {
+                $('#logout').on("click", delCookie);
+                cookie();
+            });
+
+            function cookie() {
+                <?php if (logueado()): ?>
+                    if (!$.cookie('usuario')) {
+                        $.cookie('usuario', <?= $id_usuario ?>);
+                    }
+                <?php endif; ?>
+            }
+
+            function delCookie() {
+                $.removeCookie('usuario');
+            }
+        </script>
         <header>
             <?= anchor('/portal/index', img(array('src' => 'images/logo.png',
                                                   'alt' => 'logo',

@@ -6,7 +6,8 @@ class Creadores extends CI_Controller {
     function index() {
         if ($this->input->post('nuevo') === 'TRUE') {
             $this->session->set_flashdata('nuevo', 'TRUE');
-            $this->creator_template->load('creador/index');
+            $this->creator_template->load('creador/index',
+                array('id_usuario' => $this->session->userdata('usuario')['id']));
         } else {
             redirect('portal/index');
         }
