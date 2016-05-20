@@ -28,29 +28,37 @@ create table juegos (
     id_juego    bigserial   constraint pk_juegos primary key,
     id_usuario  bigint      constraint fk_juegos_usuarios
                                        references usuarios (id_usuario),
-    nombre      varchar(50) not null
+    nombre      varchar(50) not null,
+    finalizado  boolean     not null default false
 );
 
 drop table if exists fichas cascade;
 
 create table fichas (
-    id_ficha     bigint   constraint pk_fichas primary key,
-    id_juego     bigint      constraint fk_fichas_juegos
-                                        references juegos (id_juego),
-    id_anterior  bigint      constraint fk_ficha_anterior
-                                        references fichas (id_ficha),
-    id_siguiente bigint      constraint fk_ficha_siguiente
-                                        references fichas (id_ficha),
-    final        boolean default false,
-    botones      boolean default false,
-    cont_boton1  varchar(10),
-    cont_boton2  varchar(10),
-    color_boton  varchar(10),
-    color_ficha  varchar(10),
-    imagen       boolean default false,
-    jefe         boolean default false,
-    jefe_anim    boolean default false,
-    contenido    varchar(200)
+    id_ficha   bigserial  constraint pk_fichas primary key,
+    id_juego      bigint  constraint fk_fichas_juegos
+                                        references juegos (id_juego)
+                                        on delete cascade,
+    id_anterior   bigint  constraint fk_ficha_anterior
+                                        references fichas (id_ficha)
+                                        on delete cascade,
+    id_siguiente1 bigint  constraint fk_ficha_siguiente1
+                                        references fichas (id_ficha)
+                                        on delete cascade,
+    id_siguiente2 bigint  constraint fk_ficha_siguiente2
+                                        references fichas (id_ficha)
+                                        on delete cascade,
+    titulo        varchar (50),
+    final         boolean default false,
+    botones       boolean default false,
+    cont_boton1   varchar(50),
+    cont_boton2   varchar(50),
+    color_boton   varchar(10),
+    color_ficha   varchar(10),
+    imagen        boolean default false,
+    jefe          boolean default false,
+    jefe_anim     boolean default false,
+    contenido     varchar(500)
 );
 
 drop table if exists tokens cascade;
@@ -65,3 +73,8 @@ create view v_usuarios_verificados as
     select *
     from usuarios
     where registro_verificado = true;
+
+create view v_juegos_pendientes as
+    select *
+    from juegos
+    where finalizado = false;

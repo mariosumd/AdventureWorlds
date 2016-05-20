@@ -28,18 +28,31 @@ function login()
 function crear() {
   $CI =& get_instance();
 
-  $out = "";
+  $div = "";
 
   if ($CI->Usuario->logueado()):
       $usuario = $CI->session->userdata('usuario');
-      $div  = '<div class="creador">';
-        $div .= '<h3>Crea YA tu aventura</h3>';
-        $div .= '<h4>Clica aquí para empezar</h4>';
-      $div .= '</div>';
-      $out .= anchor('creador/index', $div);
+      $div .= form_open('creadores/index');
+        $div .= form_hidden('nuevo', 'TRUE');
+        $div  .= '<div class="creador">';
+            $div .= '<h3>Crea YA tu aventura</h3>';
+            $div .= '<h4>Clica aquí para empezar</h4>';
+        $div .= '</div>';
+      $div .= form_close();
   endif;
 
-  return $out;
+  return $div;
+}
+
+function nuevo_juego() {
+    $CI =& get_instance();
+
+    $script = '';
+
+    if ($CI->session->flashdata('nuevo') === 'TRUE') {
+        $script .= '$(document).ready(nuevoJuego);';
+    }
+    return $script;
 }
 
 function usuario_id()

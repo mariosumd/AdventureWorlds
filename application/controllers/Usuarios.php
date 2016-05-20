@@ -68,9 +68,8 @@ class Usuarios extends CI_Controller {
             {
                 $usuario = $this->Usuario->por_nombre($nombre);
                 $this->session->set_userdata('usuario', array(
-                    'id' => $usuario['id'],
-                    'nombre' => $nombre,
-                    'rol_id' => $usuario['rol_id']
+                    'id' => $usuario['id_usuario'],
+                    'nombre' => $nombre
                 ));
 
                 if($this->session->has_userdata('last_uri'))

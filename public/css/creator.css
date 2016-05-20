@@ -1,0 +1,158 @@
+/*
+    azul: #0093c6
+    lila: #cc86bf
+    gris: #D8D8D8
+*/
+
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+body, html {
+    height: 100%;
+}
+
+body {
+    background-color: #D8D8D8;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover !important;
+    color: inherit;
+}
+
+header {
+    display: flex !important;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    height: 10%;
+    background-color: black;
+    color: white;
+}
+
+header > h3, .titulo {
+    font-family: 'Candal';
+    background-color: inherit;
+    color: #0093c6;
+    text-shadow: 1px 1px #000000;
+}
+
+p.small {
+    font-size: 1em !important;
+}
+
+.logo {
+    height: 50%;
+    width: 50%;
+    background-color: #D8D8D8;
+}
+
+.user {
+    display: flex;
+    flex-direction: row;
+    margin-top: 2em;
+    margin-right: 2em;
+}
+
+.user .btn-primary {
+    height: 20% !important;
+}
+
+.user > label { margin-right: 0.5em; }
+
+nav {
+    width: 50%;
+    display: flex !important;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.group h4 {
+    padding-left: 0.5em;
+}
+
+.group span {
+    cursor: pointer;
+    padding: 0.5em;
+}
+
+li > a {
+    color: white;
+    text-decoration: none;
+}
+
+li > a:hover {
+    color: white;
+    text-decoration: none;
+}
+
+ul {
+    padding: 0.5em;
+    margin: 0;
+}
+
+li {
+    display: block;
+    float: left;
+    position: relative;
+    padding: 0.5em;
+}
+
+ul ul {
+    position: absolute;
+    display: none;
+}
+
+li:hover {
+    background-color: #6A6969;
+}
+
+li:hover ul {
+    display: block;
+    background-color: #696969;
+    position: absolute;
+    margin-right: 27px;
+}
+
+li:hover ul li:hover {
+    background-color: #8C8C8C;
+}
+
+#ficha {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+#ficha > * {
+    margin: auto;
+    margin-top: 2em;
+}
+
+#ficha > h4 {
+    font-size: 3em;
+}
+
+#ficha > p {
+    font-size: 1.5em;
+    cursor: pointer;
+}
+
+.botones {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.botones > button {
+    margin: 1em:
+}
+
+.oculto {
+    display: none;
+}
+
+button.atras {
+    display: none;
+}

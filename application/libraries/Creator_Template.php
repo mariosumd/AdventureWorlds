@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class creator_Template
+class Creator_Template
 {
     public $data_template = array();
 
