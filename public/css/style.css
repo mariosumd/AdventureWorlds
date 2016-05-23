@@ -62,12 +62,12 @@ header h1, header h2 {
 }
 
 .logo {
-    height: 70%;
+    height: 100%;
     width: 70%;
 }
 
 .user .btn-primary {
-    height: 20% !important;
+    height: 20px !important;
 }
 
 div#contenido {

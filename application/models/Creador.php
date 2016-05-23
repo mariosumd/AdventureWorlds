@@ -56,6 +56,12 @@ class Creador extends CI_Model{
                            where id_ficha = ?', array($contenido, $id_ficha));
     }
 
+    public function titulo($id_ficha, $titulo) {
+        $this->db->query('update fichas
+                             set titulo = ?
+                           where id_ficha = ?', array($titulo, $id_ficha));
+    }
+
     public function contenido($id_ficha, $contenido) {
         $this->db->query('update fichas
                              set contenido = ?

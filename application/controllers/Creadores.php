@@ -6,8 +6,7 @@ class Creadores extends CI_Controller {
     function index() {
         if ($this->input->post('nuevo') === 'TRUE') {
             $this->session->set_flashdata('nuevo', 'TRUE');
-            $this->creator_template->load('creador/index',
-                array('id_usuario' => $this->session->userdata('usuario')['id']));
+            $this->creator_template->load('creador/index');
         } else {
             redirect('portal/index');
         }
@@ -34,7 +33,10 @@ class Creadores extends CI_Controller {
             'nombre' => $nombre_juego));
         $id_ficha = $this->Creador->nueva_ficha($id_juego, $nombre_ficha);
         $this->session->set_userdata('ficha', array('actual' => $id_ficha));
-        echo $id_juego;
+        echo json_encode(array(
+            'id_juego' => $id_juego,
+            'id_ficha' => $id_ficha
+        ));
     }
 
     public function color_fondo() {
@@ -66,6 +68,13 @@ class Creadores extends CI_Controller {
         $contenido = $this->input->post('contenido');
 
         $this->Creador->contenido_boton($id_ficha, $boton, $contenido);
+    }
+
+    public function titulo() {
+        $id_ficha = $this->input->post('id_ficha');
+        $titulo = $this->input->post('titulo');
+
+        $this->Creador->titulo($id_ficha, $titulo);
     }
 
     public function contenido() {

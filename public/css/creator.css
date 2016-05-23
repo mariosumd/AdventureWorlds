@@ -31,7 +31,7 @@ header {
     color: white;
 }
 
-header > h3, .titulo {
+header > h3, h4.titulo, aside h4 {
     font-family: 'Candal';
     background-color: inherit;
     color: #0093c6;
@@ -43,7 +43,7 @@ p.small {
 }
 
 .logo {
-    height: 50%;
+    height: 100%;
     width: 50%;
     background-color: #D8D8D8;
 }
@@ -56,10 +56,12 @@ p.small {
 }
 
 .user .btn-primary {
-    height: 20% !important;
+    height: 20px !important;
 }
 
-.user > label { margin-right: 0.5em; }
+.user > label {
+    margin-right: 0.5em;
+}
 
 nav {
     width: 50%;
@@ -119,15 +121,51 @@ li:hover ul li:hover {
     background-color: #8C8C8C;
 }
 
+#contenido {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    height: 90%;
+}
+
+aside {
+    background-color: white;
+    color: inherit;
+    width: 15%;
+    height: 100%;
+    border-right: 1px solid black;
+    overflow-y: scroll;
+}
+
+aside > p {
+    cursor: pointer;
+}
+
+aside > p:hover {
+    font-weight: bold;
+}
+
+aside h4 {
+    font-size: 1.5em;
+}
+
+.destacado {
+    font-weight: bold;
+    cursor: default;
+}
+
 #ficha {
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: center;
+    margin: auto;
+    margin-top: 0;
+    text-align: center;
 }
 
 #ficha > * {
     margin: auto;
-    margin-top: 2em;
+    margin-top: 5em;
 }
 
 #ficha > h4 {
@@ -137,6 +175,7 @@ li:hover ul li:hover {
 #ficha > p {
     font-size: 1.5em;
     cursor: pointer;
+    width: 75%;
 }
 
 .botones {
@@ -149,7 +188,7 @@ li:hover ul li:hover {
     margin: 1em:
 }
 
-.oculto {
+.ocultoTitl, .ocultoText {
     display: none;
 }
 

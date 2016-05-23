@@ -10,14 +10,13 @@
         var restante = caracteres - $('textarea').val().length;
         $('p > span').text(restante);
         if (restante < 0) {
-            $('p.small').css({color: 'red'});
-            $('textarea').addClass('has-error has-danger');
-            $(':submit').prop('disabled', true);
-        }
-        else {
+            $('p.small').css({color: '#a94446'});
+            $('div.comentario').addClass('has-error has-danger');
+            //$(':submit').prop('disabled', true);
+        } else {
             $('p.small').css({color: 'black'});
-            $('textarea').removeClass('has-error has-danger');
-            $(':submit').prop('disabled', false);
+            $('textarea').parent().removeClass('has-error has-danger');
+            //$(':submit').prop('disabled', false);
         }
     }
 </script>
@@ -35,20 +34,22 @@
             <?= form_input('nombre', set_value('nombre', '', FALSE),
                            'id="nombre" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]{1,50}$"'.
                            ' required class="form-control contacta"') ?>
+            <div class="help-block with-errors"></div>
           </div>
 
           <div class="form-group">
             <?= form_label('Email:', 'email') ?>
             <?= form_email('email', set_value('email', '', FALSE),
                            'id="email" required class="form-control contacta"') ?>
+            <div class="help-block with-errors"></div>
           </div>
 
-          <div class="form-group">
+          <div class="form-group comentario">
             <?= form_label('Comentario:', 'comentario') ?>
             <p class="small"><span>500</span> caracteres restantes</p>
             <?= form_textarea('comentario', set_value('comentario', '', FALSE),
-                              'id="comentario" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]{1,500}$"'.
-                              ' required class="form-control contacta"') ?>
+                              'id="comentario" required class="form-control contacta"') ?>
+            <div class="help-block with-errors"></div>
           </div>
           <?= form_submit('enviar', 'Enviar', 'class="btn btn-success"') ?>
         <?= form_close() ?>
