@@ -66,6 +66,10 @@
 
             $(document).ready(function() {
                 $('#logout').on("click", delCookie);
+                $('#modalJuego button').on('click', nombreJuego);
+                $('#modalFicha button').on('click', nombreFicha);
+                $('#modalFichaNueva button:first-of-type').on('click', ficha);
+                $('#modalFichaNueva button:last-of-type').on('click', cancelaFicha);
                 $('.colFon span').on('click', colorFondo);
                 $('.colBot span').on('click', colorBotones);
                 $('.numBot span').on('click', numBotones);
@@ -80,10 +84,8 @@
                 $('.siguiente').on('click', siguienteFicha);
                 $('.atras').on('click', anteriorFicha);
                 $('aside > p').on('click', cargaFichaLista);
-                $(window).on('beforeunload', confirmarSalida);
-                $(window).on('unload', borraJuego);
-                idFicha();
-                destacaAside(id_ficha);
+                //$(window).on('beforeunload', confirmarSalida);
+                //$(window).on('unload', borraJuego);
                 botonAtras('none');
                 cookie();
             });
@@ -100,11 +102,6 @@
 
             function delCookie() {
                 $.removeCookie('usuario');
-            }
-
-            function confirmarSalida() {
-                return 'Si sales de la página sin terminar el juego, se borrará.'+
-                       ' ¿Estás seguro de que quieres salir?';
             }
 
             function borraJuego() {
@@ -153,38 +150,52 @@
             }
 
             function nuevoJuego() {
-                var nombre_juego;
-                var nombre_ficha;
+                $('#modalJuego').modal();
+            }
 
-                do {
-                    nombre_juego = prompt("Introduce el nombre del nuevo juego.");
-                } while (!nombre_juego || /^\s+$/.test(nombre_juego));
-
+            function nombreJuego(e) {
+                e.preventDefault()
+                var nombre_juego = $('#nombre-juego').val();
                 $('header > h3').text(nombre_juego);
+                $('#modalJuego').modal('hide');
 
-                nombre_ficha = prompt("Introduce el nombre de la primera pantalla");
-
-                $('.titulo').text(nombre_ficha === '' || nombre_ficha === null
-                                ? 'Clica aquí para cambiar el título' : nombre_ficha);
-
-                res = $.ajax({
+                id_juego = $.ajax({
                     async: false,
                     url: "<?= base_url('creadores/nuevo') ?>",
                     method: 'POST',
-                    dataType: 'json',
                     data: {
                         'nombre_juego': nombre_juego,
-                        'usuario': <?= usuario_id() ?>,
-                        'nombre_ficha': nombre_ficha
+                        'usuario': <?= usuario_id() ?>
                     }
-                }).responseJSON;
+                }).responseText;
 
-                id_juego = res['id_juego'];
+                $('#modalFicha').modal();
+            }
+
+            function nombreFicha(e) {
+                e.preventDefault();
+                var nombre_ficha = $('#nombre-ficha').val();
+                $('.titulo').text(nombre_ficha === '' || nombre_ficha === null
+                                ? 'Clica aquí para cambiar el título' : nombre_ficha);
+                $('#modalFicha').modal('hide');
+
+                id_ficha = $.ajax({
+                    async: false,
+                    url: "<?= base_url('creadores/nueva') ?>",
+                    method: 'POST',
+                    data: {
+                        'id_juego': id_juego,
+                        'titulo': nombre_ficha
+                    }
+                }).responseText;
 
                 nombre_ficha = nombre_ficha === null || nombre_ficha === '' ?
                                             '<Ficha sin título>' : nombre_ficha;
-                var p = $('<p></p>').text(nombre_ficha+" [INICIO]").attr('id', res['id_ficha']);
+
+                var span = $('<span></span>').text(" [INICIO]").addClass('ficha-inicial');
+                var p = $('<p></p>').text(nombre_ficha).attr('id', id_ficha).append(span);
                 $('aside').append(p);
+                destacaAside(id_ficha);
             }
 
             function colorFondo() {
@@ -277,12 +288,12 @@
 
             function text() {
                 $(this).fadeOut();
-                $(':text').val($(this).text());
+                $('.ocultoTitl :text').val($(this).text());
                 $('.ocultoTitl').fadeIn();
             }
 
             function titulo() {
-                var titulo = $(':text').val();
+                var titulo = $('.ocultoTitl :text').val();
 
                 $.ajax({
                     url: "<?= base_url('creadores/titulo') ?>",
@@ -292,6 +303,12 @@
                         'titulo': titulo
                     }
                 });
+
+                var aside = document.getElementById(id_ficha);
+                var span = $(aside).find("span.ficha-inicial").length != 0 ?
+                    $('<span></span>').text(' [INICIO]').addClass('ficha-inicial') :
+                    '';
+                $(aside).text(titulo).append(span);
 
                 $('.ocultoTitl').fadeOut();
                 $('h4.titulo').text(titulo).fadeIn();
@@ -347,10 +364,16 @@
             }
 
             function nuevaFicha(boton) {
-                var titulo = prompt("Introduce el nombre de la siguiente ficha");
+                $('#hiddenFicha').val(boton);
+                $('#nombre-fichanueva').val('');
+                $('#modalFichaNueva').modal();
+            }
 
-                if (titulo === null) return;
 
+            function ficha(e) {
+                e.preventDefault();
+                var titulo = $('#nombre-fichanueva').val();
+                var boton  = $('#hiddenFicha').val();
                 $.ajax({
                     url: "<?= base_url('creadores/nueva_ficha') ?>",
                     method: 'POST',
@@ -359,6 +382,7 @@
                         'boton': boton
                     },
                     success: function() {
+                        $('#modalFichaNueva').modal('hide');
                         $('#ficha').fadeOut(500, function(){
                             resetStyle();
                             botonAtras(id_ficha);
@@ -372,16 +396,19 @@
                 });
             }
 
+            function cancelaFicha(e) {
+                e.preventDefault();
+                $('#modalFichaNueva').modal('hide');
+            }
+
             function anteriorFicha() {
                 var anterior = $(this).attr('value');
                 cargaFicha(anterior);
                 destacaAside(anterior);
             }
 
-            var res;
-
             function cargaFicha(id) {
-                 res = $.ajax({
+                 var res = $.ajax({
                     async: false,
                     url: "<?= base_url('creadores/cargar_ficha') ?>",
                     method: 'POST',
@@ -521,6 +548,87 @@
             </nav>
             <?= login() ?>
         </header>
+        <!-- Modal -->
+        <div class="modal fade" id="modalJuego" tabindex="-1" role="dialog"
+            aria-labelledby="nombre-juego" aria-hidden="true" data-backdrop="static"
+            data-keyboard="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="cabeceraJuego">
+                            Introduce el nombre del juego
+                        </h4>
+                    </div>
+                    <!-- Modal Body -->
+                    <div class="modal-body">
+                        <form role="form" id="formJuego">
+                            <div class="form-group">
+                                <label for="nombre-juego">Nombre del juego</label>
+                                <input type="text" class="form-control"
+                                    id="nombre-juego" pattern="^.+$" />
+                            </div>
+                            <button class="btn btn-success">Aceptar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="modalFicha" tabindex="-1" role="dialog"
+            aria-labelledby="nombre-ficha" aria-hidden="true" data-backdrop="static"
+            data-keyboard="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="cabeceraFicha">
+                            Introduce el nombre de la ficha
+                        </h4>
+                    </div>
+                    <!-- Modal Body -->
+                    <div class="modal-body">
+                        <form role="form" id="form-ficha">
+                            <div class="form-group">
+                                <label for="nombre-ficha">Nombre de la ficha</label>
+                                <input type="text" class="form-control" id="nombre-ficha" />
+                            </div>
+                            <button class="btn btn-success">Aceptar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="modalFichaNueva" tabindex="-1" role="dialog"
+            aria-labelledby="nombre-fichanueva" aria-hidden="true" data-backdrop="static"
+            data-keyboard="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="cabeceraFichaNueva">
+                            Introduce el nombre de la ficha
+                        </h4>
+                    </div>
+                    <!-- Modal Body -->
+                    <div class="modal-body">
+                        <form role="form" id="form-fichanueva">
+                            <input type=hidden id="hiddenFicha" />
+                            <div class="form-group">
+                                <label for="nombre-fichanueva">Nombre de la ficha</label>
+                                <input type="text" class="form-control" id="nombre-fichanueva" />
+                            </div>
+                            <button class="btn btn-success">Aceptar</button>
+                            <button class="btn btn-danger">Cancelar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div id="contenido">
             <aside><h4>Fichas</h4></aside>
             <div id="ficha">

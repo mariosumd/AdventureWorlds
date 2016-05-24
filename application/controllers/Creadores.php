@@ -25,18 +25,22 @@ class Creadores extends CI_Controller {
     public function nuevo() {
         $id_usuario = $this->input->post('usuario');
         $nombre_juego = $this->input->post('nombre_juego');
-        $nombre_ficha = $this->input->post('nombre_ficha');
 
         $id_juego = $this->Creador->nuevo_juego($id_usuario, $nombre_juego);
         $this->session->set_userdata('juego', array(
             'id' => $id_juego,
             'nombre' => $nombre_juego));
-        $id_ficha = $this->Creador->nueva_ficha($id_juego, $nombre_ficha);
+
+        echo $id_juego;
+    }
+
+    public function nueva() {
+        $id_juego = $this->input->post('id_juego');
+        $titulo   = $this->input->post('titulo');
+
+        $id_ficha = $this->Creador->nueva_ficha($id_juego, $titulo);
         $this->session->set_userdata('ficha', array('actual' => $id_ficha));
-        echo json_encode(array(
-            'id_juego' => $id_juego,
-            'id_ficha' => $id_ficha
-        ));
+        echo $id_ficha;
     }
 
     public function color_fondo() {
