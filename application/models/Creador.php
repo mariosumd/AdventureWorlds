@@ -19,7 +19,7 @@ class Creador extends CI_Model{
     public function ficha_final($id_ficha) {
         $this->db->query('update fichas
                              set final = true
-                           where ficha = ?', array($id_ficha));
+                           where id_ficha = ?', array($id_ficha));
     }
 
     public function nueva_ficha($id_juego, $nombre_ficha) {
@@ -87,5 +87,19 @@ class Creador extends CI_Model{
                                     array($id_ficha));
 
         return $res->row_array();
+    }
+
+    public function lista_fichas($id_juego, $id_ficha) {
+        $res = $this->db->query('select id_ficha, titulo
+                                   from fichas
+                                  where id_juego = ? and id_ficha != ?',
+                                  array($id_juego, $id_ficha));
+
+        if ($res->num_rows() < 1) {
+            return array('display' => FALSE);
+        } else {
+            $lista = $res->result_array();
+            return array('display' => TRUE, 'lista' => $lista);
+        }
     }
 }

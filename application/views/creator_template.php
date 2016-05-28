@@ -68,8 +68,10 @@
                 $('#logout').on("click", delCookie);
                 $('#modalJuego button').on('click', nombreJuego);
                 $('#modalFicha button').on('click', nombreFicha);
-                $('#modalFichaNueva button:first-of-type').on('click', ficha);
-                $('#modalFichaNueva button:last-of-type').on('click', cancelaFicha);
+                $('#form-fichanueva button:first-of-type').on('click', nuevaFicha);
+                $('#form-fichanueva button:last-of-type').on('click', cancelaFicha);
+                $('#form-otraficha button:first-of-type').on('click', ligarFicha);
+                $('#form-otraficha button:last-of-type').on('click', cancelaFicha);
                 $('.colFon span').on('click', colorFondo);
                 $('.colBot span').on('click', colorBotones);
                 $('.numBot span').on('click', numBotones);
@@ -82,11 +84,9 @@
                 $('.ocultoText > button:first-of-type').on('click', contenido);
                 $('.ocultoText > button:last-of-type').on('click', cancelaContenido);
                 $('.siguiente').on('click', siguienteFicha);
-                $('.atras').on('click', anteriorFicha);
-                $('aside > p').on('click', cargaFichaLista);
+                $('aside > div').on('click', cargaFichaLista);
                 //$(window).on('beforeunload', confirmarSalida);
                 //$(window).on('unload', borraJuego);
-                botonAtras('none');
                 cookie();
             });
 
@@ -124,17 +124,18 @@
             function anadeFichaAside(id_ficha, titulo) {
                 titulo = titulo === null || titulo === '' ? '<Ficha sin título>' : titulo;
 
-                var p = $('<p></p>')
-                    .text(titulo)
-                    .attr('id', id_ficha)
-                    .on('click', cargaFichaLista);;
-                $('aside').append(p);
+                var p = $('<p></p>').text(titulo);
+                var div = $('<div></div>')
+                .attr('id', id_ficha)
+                .append(p)
+                .append($('<ul></ul>'));
+                $('aside').append(div);
             }
 
             function destacaAside(id) {
-                var p = document.getElementById(id);
-                $('aside > p').removeClass('destacado').on('click', cargaFichaLista);;
-                $(p).addClass('destacado').off('click');
+                var div = document.getElementById(id);
+                $('aside > div').removeClass('destacado').on('click', cargaFichaLista);
+                $(div).addClass('destacado').off('click');
             }
 
             function fichaFinal() {
@@ -193,8 +194,9 @@
                                             '<Ficha sin título>' : nombre_ficha;
 
                 var span = $('<span></span>').text(" [INICIO]").addClass('ficha-inicial');
-                var p = $('<p></p>').text(nombre_ficha).attr('id', id_ficha).append(span);
-                $('aside').append(p);
+                var p = $('<p></p>').text(nombre_ficha);
+                var div = $('<div></div>').attr('id', id_ficha).append(span).append(p).append($('<ul></ul>'));
+                $('aside').append(div);
                 destacaAside(id_ficha);
             }
 
@@ -304,14 +306,14 @@
                     }
                 });
 
-                var aside = document.getElementById(id_ficha);
-                var span = $(aside).find("span.ficha-inicial").length != 0 ?
-                    $('<span></span>').text(' [INICIO]').addClass('ficha-inicial') :
-                    '';
-                $(aside).text(titulo).append(span);
+                var divs = document.getElementById(id_ficha);
+                $(div).find('p').text(titulo === null || titulo === ''
+                                      ? '<Ficha sin título>' : titulo);
 
                 $('.ocultoTitl').fadeOut();
-                $('h4.titulo').text(titulo).fadeIn();
+                $('h4.titulo').text(titulo === '' || titulo === null
+                                    ? 'Clica aquí para cambiar el título' : titulo)
+                .fadeIn();
             }
 
             function cancelaTitulo() {
@@ -352,7 +354,7 @@
 
                 if (siguiente === 'none') {
                     var boton = $(this).index()+1 === 1 ? 1 : 2;
-                    nuevaFicha(boton);
+                    ficha(boton);
                 } else {
                     cargaFicha(siguiente);
                 }
@@ -363,14 +365,43 @@
                 cargaFicha(ficha);
             }
 
-            function nuevaFicha(boton) {
+            function ficha(boton) {
+                var res = $.ajax({
+                    url: "<?= base_url('creadores/lista_fichas') ?>",
+                    dataType: 'json',
+                    method: 'POST',
+                    async: false,
+                    data: {
+                        'id_juego': id_juego,
+                        'id_ficha': id_ficha
+                    }
+                }).responseJSON;
+
+                $('#nombre-otraficha').empty();
+                if (res.display === true) {
+                    for (var i = 0; i < res.lista.length; i++) {
+                        alert(res.lista[i].titulo);
+                        var option = $('<option></option>')
+                        .attr('value', res.lista[i].id_ficha)
+                        .text(res.lista[i].titulo === '' ||
+                              res.lista[i].titulo === null ?
+                              '<ficha sin título>' : res.lista[i].titulo);
+                        $('#nombre-otraficha').append(option);
+                    }
+                    $('hr').fadeIn();
+                    $('#form-otraficha').fadeIn();
+                } else {
+                    $('hr').fadeOut();
+                    $('#form-otraficha').fadeOut();
+                }
+
                 $('#hiddenFicha').val(boton);
                 $('#nombre-fichanueva').val('');
                 $('#modalFichaNueva').modal();
             }
 
 
-            function ficha(e) {
+            function nuevaFicha(e) {
                 e.preventDefault();
                 var titulo = $('#nombre-fichanueva').val();
                 var boton  = $('#hiddenFicha').val();
@@ -383,13 +414,44 @@
                     },
                     success: function() {
                         $('#modalFichaNueva').modal('hide');
+                        var ficha = document.getElementById(id_ficha);
+                        if (boton === "1") $(ficha).find('ul').prepend($('<li></li>').text(titulo));
+                        else $(ficha).find('ul').append($('<li></li>').text(titulo));
                         $('#ficha').fadeOut(500, function(){
                             resetStyle();
-                            botonAtras(id_ficha);
                             idFicha();
-                            $('.titulo').text(titulo);
+                            $('.titulo').text(titulo === '' || titulo === null
+                                              ? 'Clica aquí para cambiar el título' : titulo);
                             $('#ficha').fadeIn(500);
                             anadeFichaAside(id_ficha, titulo);
+                            destacaAside(id_ficha);
+                        });
+                    }
+                });
+            }
+
+            function ligarFicha(e) {
+                e.preventDefault();
+                var id = $('#nombre-otraficha').val();
+                var titulo = $('#nombre-otraficha').text();
+                var boton = $('#hiddenFicha').val();
+
+                $.ajax({
+                    url: "<?= base_url('creadores/ligar_ficha') ?>",
+                    method: 'POST',
+                    data: {
+                        'id': id,
+                        'boton': boton
+                    },
+                    success: function() {
+                        $('#modalFichaNueva').modal('hide');
+                        var ficha = document.getElementById(id_ficha);
+                        if (boton === "1") $(ficha).find('ul').prepend($('<li></li>').text(titulo));
+                        else $(ficha).find('ul').append($('<li></li>').text(titulo));
+                        $('#ficha').fadeOut(500, function(){
+                            idFicha();
+                            cargaFicha(id_ficha);
+                            $('#ficha').fadeIn(500);
                             destacaAside(id_ficha);
                         });
                     }
@@ -399,12 +461,6 @@
             function cancelaFicha(e) {
                 e.preventDefault();
                 $('#modalFichaNueva').modal('hide');
-            }
-
-            function anteriorFicha() {
-                var anterior = $(this).attr('value');
-                cargaFicha(anterior);
-                destacaAside(anterior);
             }
 
             function cargaFicha(id) {
@@ -436,7 +492,6 @@
                     $(".botones button:first-child").attr('value', id_siguiente1);
                     var id_siguiente2 = res.id_siguiente2 === null ? 'none' : res.id_siguiente2;
                     $(".botones button:last-child").attr('value', id_siguiente2);
-                    botonAtras(res.id_anterior === null ? 'none' : res.id_anterior);
                     idFicha();
 
                     if (res.final === "t") {
@@ -475,14 +530,6 @@
                     destacaAside(id);
                 });
 
-            }
-
-            function botonAtras(anterior) {
-                if (anterior === 'none') {
-                    $('.atras').fadeOut();
-                } else {
-                    $('.atras').attr('value', anterior).fadeIn();
-                }
             }
 
             function resetStyle() {
@@ -584,7 +631,7 @@
                     <!-- Modal Header -->
                     <div class="modal-header">
                         <h4 class="modal-title" id="cabeceraFicha">
-                            Introduce el nombre de la ficha
+                            Introduce el nombre de la primera ficha
                         </h4>
                     </div>
                     <!-- Modal Body -->
@@ -610,7 +657,7 @@
                     <!-- Modal Header -->
                     <div class="modal-header">
                         <h4 class="modal-title" id="cabeceraFichaNueva">
-                            Introduce el nombre de la ficha
+                            Nueva ficha u otra anterior
                         </h4>
                     </div>
                     <!-- Modal Body -->
@@ -618,8 +665,17 @@
                         <form role="form" id="form-fichanueva">
                             <input type=hidden id="hiddenFicha" />
                             <div class="form-group">
-                                <label for="nombre-fichanueva">Nombre de la ficha</label>
+                                <label for="nombre-fichanueva">Nueva ficha</label>
                                 <input type="text" class="form-control" id="nombre-fichanueva" />
+                            </div>
+                            <button class="btn btn-success">Aceptar</button>
+                            <button class="btn btn-danger">Cancelar</button>
+                        </form>
+                        <hr />
+                        <form role="form" id="form-otraficha">
+                            <div class="form-group">
+                                <label for="nombre-otraficha">Otra ficha</label>
+                                <select id="nombre-otraficha"></select>
                             </div>
                             <button class="btn btn-success">Aceptar</button>
                             <button class="btn btn-danger">Cancelar</button>
@@ -660,7 +716,6 @@
                         >
                     </button>
                 </div>
-                <button class="btn btn-danger atras">Atrás</button>
                 <?= $contents ?>
             </div>
         </div>

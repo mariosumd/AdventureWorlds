@@ -79,45 +79,45 @@ nav {
     padding: 0.5em;
 }
 
-li > a {
+header li > a {
     color: white;
     text-decoration: none;
 }
 
-li > a:hover {
+header li > a:hover {
     color: white;
     text-decoration: none;
 }
 
-ul {
+header ul {
     padding: 0.5em;
     margin: 0;
 }
 
-li {
+header li {
     display: block;
     float: left;
     position: relative;
     padding: 0.5em;
 }
 
-ul ul {
+header ul ul {
     position: absolute;
     display: none;
 }
 
-li:hover {
+header li:hover {
     background-color: #6A6969;
 }
 
-li:hover ul {
+header li:hover ul {
     display: block;
     background-color: #696969;
     position: absolute;
     margin-right: 27px;
 }
 
-li:hover ul li:hover {
+header li:hover ul li:hover {
     background-color: #8C8C8C;
 }
 
@@ -135,15 +135,24 @@ aside {
     height: 100%;
     border-right: 1px solid black;
     overflow-y: scroll;
+    overflow-x: scroll;
 }
 
-aside > p {
+aside > div {
     cursor: pointer;
-    margin-left: 5px;
+    border: 1px solid gray;
+    background-color: rgba(0, 147, 198, 0.5);
+    color:inherit;
+    margin: 5px;
 }
 
-aside > p:hover {
-    font-weight: bold;
+aside > div:hover {
+    background-color: rgba(0, 147, 198, 1);
+    color: white;
+}
+
+aside > div > * {
+    margin-left: 5px;
 }
 
 aside h4 {
@@ -151,9 +160,15 @@ aside h4 {
     margin-left: 5px;
 }
 
+aside ul li:before {
+    content: "\00BB";
+}
+
 .destacado {
     font-weight: bold;
+    color: white;
     cursor: default;
+    background-color: rgba(0, 147, 198, 1);
 }
 
 #ficha {
@@ -188,7 +203,7 @@ aside h4 {
 }
 
 .botones > button {
-    margin: 1em:
+    margin: 5px;
 }
 
 .ocultoTitl, .ocultoText {

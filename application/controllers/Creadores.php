@@ -107,6 +107,18 @@ class Creadores extends CI_Controller {
         $this->Creador->ficha_siguiente($id_ficha, $id_anterior, $boton);
     }
 
+    public function ligar_ficha() {
+        $boton = $this->input->post('boton');
+        $id_ficha = $this->input->post('id');
+        $id_anterior = $this->session->userdata('ficha')['actual'];
+
+        $this->session->set_userdata('ficha', array(
+                                                'actual' => $id_ficha,
+                                                'anterior' => $id_anterior));
+
+        $this->Creador->ficha_siguiente($id_ficha, $id_anterior, $boton);
+    }
+
     public function cargar_ficha() {
         $id = $this->input->post('id');
         $fila = $this->Creador->cargar_ficha($id);
@@ -135,5 +147,14 @@ class Creadores extends CI_Controller {
 
         header('Content-Type: application/json');
         echo json_encode($fila);
+    }
+
+    public function lista_fichas() {
+        $id_ficha = $this->input->post('id_ficha');
+        $id_juego = $this->input->post('id_juego');
+
+        $lista = $this->Creador->lista_fichas($id_juego, $id_ficha);
+
+        echo json_encode($lista);
     }
 }
