@@ -66,12 +66,12 @@
 
             $(document).ready(function() {
                 $('#logout').on("click", delCookie);
-                $('#modalJuego button').on('click', nombreJuego);
+                $('#formJuego button').on('click', nombreJuego);
+                $('#form-otrojuego button').on('click', cargaJuego);
                 $('#modalFicha button').on('click', nombreFicha);
                 $('#form-fichanueva button:first-of-type').on('click', nuevaFicha);
-                $('#form-fichanueva button:last-of-type').on('click', cancelaFicha);
                 $('#form-otraficha button:first-of-type').on('click', ligarFicha);
-                $('#form-otraficha button:last-of-type').on('click', cancelaFicha);
+                $('.modal-footer button').on('click', cancelaFicha);
                 $('.colFon span').on('click', colorFondo);
                 $('.colBot span').on('click', colorBotones);
                 $('.numBot span').on('click', numBotones);
@@ -121,21 +121,43 @@
                 }).responseText;
             }
 
-            function anadeFichaAside(id_ficha, titulo) {
+            function anadeFichaAside(idFicha, titulo) {
                 titulo = titulo === null || titulo === '' ? '<Ficha sin título>' : titulo;
 
                 var p = $('<p></p>').text(titulo);
                 var div = $('<div></div>')
-                .attr('id', id_ficha)
+                .attr('id', idFicha)
                 .append(p)
                 .append($('<ul></ul>'));
                 $('aside').append(div);
+            }
+
+            function cargaFichaAside(idFicha, titulo, siguiente1, siguiente2) {
+                anadeFichaAside(idFicha, titulo);
+                if (siguiente1 !== null && siguiente1 !== '') {
+                    var li = $('<li></li>').text(siguiente1);
+                    $(document.getElementById(idFicha)).find('ul').prepend(li);
+                }
+                if (siguiente2 !== null && siguiente2 !== '') {
+                    var li = $('<li></li>').text(siguiente2);
+                    $(document.getElementById(idFicha)).find('ul').append(li);
+                }
             }
 
             function destacaAside(id) {
                 var div = document.getElementById(id);
                 $('aside > div').removeClass('destacado').on('click', cargaFichaLista);
                 $(div).addClass('destacado').off('click');
+            }
+
+            function asideInicio(idFicha) {
+                var span = $('<span></span>').text('[INICIO]');
+                $(document.getElementById(idFicha)).prepend(span);
+            }
+
+            function asideFinal() {
+                var span = $('<span></span>').text('[FINAL]');
+                $(document.getElementById(idFicha)).prepend(span);
             }
 
             function fichaFinal() {
@@ -150,8 +172,58 @@
                 $('.botones').fadeOut();
             }
 
-            function nuevoJuego() {
+            function juego() {
+                var juegos = $.ajax({
+                    url: "<?= base_url('creadores/lista_juegos') ?>",
+                    method: 'POST',
+                    async: false,
+                    dataType: 'json',
+                    data: {
+                        id_usuario: <?= usuario_id() ?>
+                    }
+                }).responseJSON;
+
+                if (juegos.display === true) {
+                    for (var i = 0; i < juegos.lista.length; i++) {
+                        var option = $('<option></option>')
+                        .text(juegos.lista[i].nombre)
+                        .attr('value', juegos.lista[i].id_juego);
+                        $('#nombre-otrojuego').append(option);
+                    }
+                    $('hr').fadeIn();
+                    $('#form-otrojuego').fadeIn();
+                } else {
+                    $('hr').fadeOut();
+                    $('#form-otrojuego').fadeOut();
+                }
+
                 $('#modalJuego').modal();
+            }
+
+            function cargaJuego(e) {
+                e.preventDefault();
+                id_juego = $('#nombre-otrojuego').val();
+
+                var fichas = $.ajax({
+                    url: "<?= base_url('creadores/cargar_juego') ?>",
+                    method: 'POST',
+                    async: false,
+                    dataType: 'json',
+                    data: {
+                        'id_juego': id_juego
+                    }
+                }).responseJSON;
+
+                for (var i = 0; i < fichas.length; i++) {
+                    cargaFichaAside(fichas[i].id_ficha, fichas[i].titulo,
+                                    fichas[i].siguiente1, fichas[i].siguiente2);
+                    if (fichas[i].final === 't') asideFinal(fichas[i].id_ficha);
+                }
+
+                id_ficha = fichas[0].id_ficha;
+                asideInicio(id_ficha);
+                cargaFicha(id_ficha);
+                $('#modalJuego').modal('hide');
             }
 
             function nombreJuego(e) {
@@ -176,8 +248,8 @@
             function nombreFicha(e) {
                 e.preventDefault();
                 var nombre_ficha = $('#nombre-ficha').val();
-                $('.titulo').text(nombre_ficha === '' || nombre_ficha === null
-                                ? 'Clica aquí para cambiar el título' : nombre_ficha);
+                $('.titulo').text(nombre_ficha === '' || nombre_ficha === null ?
+                                  'Clica aquí para cambiar el título' : nombre_ficha);
                 $('#modalFicha').modal('hide');
 
                 id_ficha = $.ajax({
@@ -273,7 +345,7 @@
             function contenidoBoton() {
                 var boton = $(this).attr('value');
                 var contenido = prompt('Introduce el contenido del botón');
-                contenido = contenido === null ? '' : contenido
+                id (contenido === null) return;
 
                 $.ajax({
                     url: "<?= base_url('creadores/contenido_boton') ?>",
@@ -307,12 +379,12 @@
                 });
 
                 var divs = document.getElementById(id_ficha);
-                $(div).find('p').text(titulo === null || titulo === ''
-                                      ? '<Ficha sin título>' : titulo);
+                $(div).find('p').text(titulo === null || titulo === '' ?
+                                      '<Ficha sin título>' : titulo);
 
                 $('.ocultoTitl').fadeOut();
-                $('h4.titulo').text(titulo === '' || titulo === null
-                                    ? 'Clica aquí para cambiar el título' : titulo)
+                $('h4.titulo').text(titulo === '' || titulo === null ?
+                                    'Clica aquí para cambiar el título' : titulo)
                 .fadeIn();
             }
 
@@ -328,7 +400,6 @@
             }
 
             function contenido() {
-                alert('hola');
                 var contenido = $('textarea').val();
 
                 $.ajax({
@@ -380,7 +451,6 @@
                 $('#nombre-otraficha').empty();
                 if (res.display === true) {
                     for (var i = 0; i < res.lista.length; i++) {
-                        alert(res.lista[i].titulo);
                         var option = $('<option></option>')
                         .attr('value', res.lista[i].id_ficha)
                         .text(res.lista[i].titulo === '' ||
@@ -420,8 +490,8 @@
                         $('#ficha').fadeOut(500, function(){
                             resetStyle();
                             idFicha();
-                            $('.titulo').text(titulo === '' || titulo === null
-                                              ? 'Clica aquí para cambiar el título' : titulo);
+                            $('.titulo').text(titulo === '' || titulo === null ?
+                                              'Clica aquí para cambiar el título' : titulo);
                             $('#ficha').fadeIn(500);
                             anadeFichaAside(id_ficha, titulo);
                             destacaAside(id_ficha);
@@ -492,7 +562,7 @@
                     $(".botones button:first-child").attr('value', id_siguiente1);
                     var id_siguiente2 = res.id_siguiente2 === null ? 'none' : res.id_siguiente2;
                     $(".botones button:last-child").attr('value', id_siguiente2);
-                    idFicha();
+                    id_ficha = id;
 
                     if (res.final === "t") {
                         $('.botones').fadeOut();
@@ -604,16 +674,24 @@
                     <!-- Modal Header -->
                     <div class="modal-header">
                         <h4 class="modal-title" id="cabeceraJuego">
-                            Introduce el nombre del juego
+                            Elige un nuevo juego, o un juego inacabado
                         </h4>
                     </div>
                     <!-- Modal Body -->
                     <div class="modal-body">
                         <form role="form" id="formJuego">
                             <div class="form-group">
-                                <label for="nombre-juego">Nombre del juego</label>
+                                <label for="nombre-juego">Nombre del nuevo juego</label>
                                 <input type="text" class="form-control"
                                     id="nombre-juego" pattern="^.+$" />
+                            </div>
+                            <button class="btn btn-success">Aceptar</button>
+                        </form>
+                        <hr />
+                        <form role="form" id="form-otrojuego">
+                            <div class="form-group">
+                                <label for="nombre-otrojuego">Juego inacabado</label>
+                                <select id="nombre-otrojuego"></select>
                             </div>
                             <button class="btn btn-success">Aceptar</button>
                         </form>
@@ -669,7 +747,6 @@
                                 <input type="text" class="form-control" id="nombre-fichanueva" />
                             </div>
                             <button class="btn btn-success">Aceptar</button>
-                            <button class="btn btn-danger">Cancelar</button>
                         </form>
                         <hr />
                         <form role="form" id="form-otraficha">
@@ -678,8 +755,10 @@
                                 <select id="nombre-otraficha"></select>
                             </div>
                             <button class="btn btn-success">Aceptar</button>
-                            <button class="btn btn-danger">Cancelar</button>
                         </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger">Cancelar</button>
                     </div>
                 </div>
             </div>

@@ -2,6 +2,29 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Creador extends CI_Model{
+
+    public function lista_juegos($id_usuario) {
+        $res = $this->db->query('select *
+                                   from v_juegos_pendientes
+                                  where id_usuario = ?', array($id_usuario));
+
+        if ($res->num_rows() < 1) {
+            return array('display' => FALSE);
+        } else {
+            $lista = $res->result_array();
+            return array('display' => TRUE, 'lista' => $lista);
+        }
+    }
+
+    public function cargar_juego($id_juego) {
+        $res = $this->db->query('select *
+                                   from v_fichas_formateadas
+                                  where id_juego = ?
+                               order by id_ficha', array($id_juego));
+
+        return $res->result_array();
+    }
+
     public function borrar_juego($id_juego) {
         $id = array($id_juego);
         $this->db->query('delete from fichas where id_juego = ?', $id);

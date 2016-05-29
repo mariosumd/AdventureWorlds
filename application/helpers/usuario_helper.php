@@ -50,7 +50,7 @@ function nuevo_juego() {
     $script = '';
 
     if ($CI->session->flashdata('nuevo') === 'TRUE') {
-        $script .= '$(document).ready(nuevoJuego);';
+        $script .= '$(document).ready(juego);';
     }
     return $script;
 }

@@ -78,3 +78,10 @@ create view v_juegos_pendientes as
     select *
     from juegos
     where finalizado = false;
+
+create view v_fichas_formateadas as
+    select f.titulo, f.id_ficha, f.id_juego, f.final, u.titulo as siguiente1,
+           d.titulo as siguiente2,
+    from fichas f
+    left join fichas u on f.id_siguiente1 = u.id_ficha
+    left join fichas d on f.id_siguiente2 = d.id_ficha;

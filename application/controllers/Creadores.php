@@ -3,13 +3,27 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Creadores extends CI_Controller {
 
-    function index() {
+    public function index() {
         if ($this->input->post('nuevo') === 'TRUE') {
             $this->session->set_flashdata('nuevo', 'TRUE');
             $this->creator_template->load('creador/index');
         } else {
             redirect('portal/index');
         }
+    }
+
+    public function lista_juegos() {
+        $id_usuario = $this->input->post('id_usuario');
+        $lista = $this->Creador->lista_juegos($id_usuario);
+
+        echo json_encode($lista);
+    }
+
+    public function cargar_juego() {
+        $id_juego = $this->input->post('id_juego');
+        $fichas = $this->Creador->cargar_juego($id_juego);
+
+        echo json_encode($fichas);
     }
 
     public function borrar_juego() {
