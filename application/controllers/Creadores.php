@@ -16,6 +16,7 @@ class Creadores extends CI_Controller {
         $id_usuario = $this->input->post('id_usuario');
         $lista = $this->Creador->lista_juegos($id_usuario);
 
+        header('Content-Type: application/json');
         echo json_encode($lista);
     }
 
@@ -23,6 +24,7 @@ class Creadores extends CI_Controller {
         $id_juego = $this->input->post('id_juego');
         $fichas = $this->Creador->cargar_juego($id_juego);
 
+        header('Content-Type: application/json');
         echo json_encode($fichas);
     }
 
@@ -169,6 +171,7 @@ class Creadores extends CI_Controller {
 
         $lista = $this->Creador->lista_fichas($id_juego, $id_ficha);
 
+        header('Content-Type: application/json');
         echo json_encode($lista);
     }
 }

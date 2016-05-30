@@ -203,6 +203,7 @@
             function cargaJuego(e) {
                 e.preventDefault();
                 id_juego = $('#nombre-otrojuego').val();
+                nombre_juego = $('#nombre-otrojuego :selected').text();
 
                 var fichas = $.ajax({
                     url: "<?= base_url('creadores/cargar_juego') ?>",
@@ -220,6 +221,7 @@
                     if (fichas[i].final === 't') asideFinal(fichas[i].id_ficha);
                 }
 
+                $('header > h3').text(nombre_juego);
                 id_ficha = fichas[0].id_ficha;
                 asideInicio(id_ficha);
                 cargaFicha(id_ficha);
@@ -229,6 +231,17 @@
             function nombreJuego(e) {
                 e.preventDefault()
                 var nombre_juego = $('#nombre-juego').val();
+                var div = $('#nombre-juego').parent();
+
+                if (nombre_juego.length > 50) {
+                    $(div).find('span').css({color: '#a94446'});
+                    $(div).addClass('has-error');
+                    return;
+                } else {
+                    $(div).find('span').css({color: 'inherit'});
+                    $(div).removeClass('has-error');
+                }
+
                 $('header > h3').text(nombre_juego);
                 $('#modalJuego').modal('hide');
 
@@ -248,6 +261,18 @@
             function nombreFicha(e) {
                 e.preventDefault();
                 var nombre_ficha = $('#nombre-ficha').val();
+
+                var div = $('#nombre-ficha').parent();
+
+                if (nombre_ficha.length > 50) {
+                    $(div).find('span').css({color: '#a94446'});
+                    $(div).addClass('has-error');
+                    return;
+                } else {
+                    $(div).find('span').css({color: 'inherit'});
+                    $(div).removeClass('has-error');
+                }
+
                 $('.titulo').text(nombre_ficha === '' || nombre_ficha === null ?
                                   'Clica aquí para cambiar el título' : nombre_ficha);
                 $('#modalFicha').modal('hide');
@@ -345,7 +370,7 @@
             function contenidoBoton() {
                 var boton = $(this).attr('value');
                 var contenido = prompt('Introduce el contenido del botón');
-                id (contenido === null) return;
+                if (contenido === null) return;
 
                 $.ajax({
                     url: "<?= base_url('creadores/contenido_boton') ?>",
@@ -363,11 +388,26 @@
             function text() {
                 $(this).fadeOut();
                 $('.ocultoTitl :text').val($(this).text());
-                $('.ocultoTitl').fadeIn();
+                $('.ocultoTitl')
+                .css({
+                    padding: "10px",
+                    borderRadius: "15px 15px",
+                    backgroundColor: "white"
+                })
+                .fadeIn();
             }
 
             function titulo() {
                 var titulo = $('.ocultoTitl :text').val();
+
+                if (titulo.length > 50) {
+                    $('.ocultoTitl span').css({color: '#a94446'});
+                    $('div.ocultoTitl').addClass('has-error');
+                    return;
+                } else {
+                    $('.ocultoTitl span').css({color: 'inherit'});
+                    $('div.ocultoTitl').removeClass('has-error');
+                }
 
                 $.ajax({
                     url: "<?= base_url('creadores/titulo') ?>",
@@ -378,7 +418,7 @@
                     }
                 });
 
-                var divs = document.getElementById(id_ficha);
+                var div = document.getElementById(id_ficha);
                 $(div).find('p').text(titulo === null || titulo === '' ?
                                       '<Ficha sin título>' : titulo);
 
@@ -389,6 +429,8 @@
             }
 
             function cancelaTitulo() {
+                $('.ocultoTitl span').css({color: 'inherit'});
+                $('.ocultoTitl').removeClass('has-error');
                 $('.ocultoTitl').fadeOut();
                 $('#ficha > h4').fadeIn();
             }
@@ -396,11 +438,26 @@
             function textarea() {
                 $(this).fadeOut();
                 $('textarea').val($(this).text());
-                $('.ocultoText').fadeIn();
+                $('.ocultoText')
+                .css({
+                    padding: "10px",
+                    borderRadius: "15px 15px",
+                    backgroundColor: "white"
+                })
+                .fadeIn();
             }
 
             function contenido() {
                 var contenido = $('textarea').val();
+
+                if (contenido.length > 500) {
+                    $('.ocultoText span').css({color: '#a94446'});
+                    $('div.ocultoText').addClass('has-error');
+                    return;
+                } else {
+                    $('.ocultoText span').css({color: 'inherit'});
+                    $('div.ocultoText').removeClass('has-error');
+                }
 
                 $.ajax({
                     url: "<?= base_url('creadores/contenido') ?>",
@@ -416,6 +473,8 @@
             }
 
             function cancelaContenido() {
+                $('.ocultoText span').css({color: 'inherit'});
+                $('.ocultoText').removeClass('has-error');
                 $('.ocultoText').fadeOut();
                 $('#ficha > p').fadeIn();
             }
@@ -474,6 +533,17 @@
             function nuevaFicha(e) {
                 e.preventDefault();
                 var titulo = $('#nombre-fichanueva').val();
+                var div = $('#nombre-fichanueva').parent();
+
+                if (titulo.length > 50) {
+                    $(div).find('span').css({color: '#a94446'});
+                    $(div).addClass('has-error');
+                    return;
+                } else {
+                    $(div).find('span').css({color: 'inherit'});
+                    $(div).removeClass('has-error');
+                }
+
                 var boton  = $('#hiddenFicha').val();
                 $.ajax({
                     url: "<?= base_url('creadores/nueva_ficha') ?>",
@@ -603,6 +673,7 @@
             }
 
             function resetStyle() {
+                $('body').animate({backgroundColor: 'white'}, 'fast');
                 $('*[style]').attr('style', '');
                 $('.titulo').text('');
                 $('#ficha p').text("Clica aquí para cambiar el contenido");
@@ -682,6 +753,8 @@
                         <form role="form" id="formJuego">
                             <div class="form-group">
                                 <label for="nombre-juego">Nombre del nuevo juego</label>
+                                <br />
+                                <span>Máximo 50 caracteres</span>
                                 <input type="text" class="form-control"
                                     id="nombre-juego" pattern="^.+$" />
                             </div>
@@ -717,6 +790,8 @@
                         <form role="form" id="form-ficha">
                             <div class="form-group">
                                 <label for="nombre-ficha">Nombre de la ficha</label>
+                                <br />
+                                <span>Máximo 50 caracteres</span>
                                 <input type="text" class="form-control" id="nombre-ficha" />
                             </div>
                             <button class="btn btn-success">Aceptar</button>
@@ -744,6 +819,8 @@
                             <input type=hidden id="hiddenFicha" />
                             <div class="form-group">
                                 <label for="nombre-fichanueva">Nueva ficha</label>
+                                <br />
+                                <span>Máximo 50 caracteres</span>
                                 <input type="text" class="form-control" id="nombre-fichanueva" />
                             </div>
                             <button class="btn btn-success">Aceptar</button>
@@ -771,15 +848,19 @@
                 <h4 class="titulo"></h4>
                 <div class="ocultoTitl form-group">
                     <?= form_label('Titulo:', 'titulo') ?>
+                    <br />
+                    <span>Máximo 50 caracteres</span>
                     <?= form_input('titulo', set_value('titulo', '', FALSE),
                                     'class="form-control titulo"') ?>
                     <button class="btn btn-success">Cambiar contenido</button>
                     <button class="btn btn-danger">Cancelar</button>
                 </div>
+
                 <p class="contenido">Clica aquí para cambiar el contenido</p>
                 <div class="ocultoText form-group">
                     <?= form_label('Contenido:', 'contenido') ?>
-                    <p class="small">Máximo 500 caracteres</p>
+                    <br />
+                    <span>Máximo 500 caracteres</span>
                     <?= form_textarea('contenido', set_value('contenido', '', FALSE),
                                       'class="form-control contenido"') ?>
                     <button class="btn btn-success">Cambiar contenido</button>
