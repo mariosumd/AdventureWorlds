@@ -76,6 +76,9 @@
                 $('.colBot span').on('click', colorBotones);
                 $('.numBot span').on('click', numBotones);
                 $('.final span').on('click', fichaFinal);
+                $('.img > span').on('click', imagen);
+                $('#form-img').on('submit', subirImagen);
+                $('.footer-img > button').on('click', cancelaImagen);
                 $('.botones button:not(.siguiente)').on('click', contenidoBoton);
                 $('h4.titulo').on('click', text);
                 $('.ocultoTitl > button:first-of-type').on('click', titulo);
@@ -666,6 +669,15 @@
                             $('#ficha h4').animate({color: '#0093c6'}, 'fast');
                         }
                     }
+
+                    if (res.imagen === "t") {
+                        $('#ficha').css({
+                            backgroundImage: "url(/images/juegos/"+id_ficha+".jpg)",
+                            backgroundRepeat: "no-repeat",
+                            backgroundPosition: "center"
+                        });
+                    }
+
                     $("#ficha").fadeIn(500).stop(true, true);
                     destacaAside(id);
                 });
@@ -678,6 +690,43 @@
                 $('.titulo').text('');
                 $('#ficha p').text("Clica aquí para cambiar el contenido");
                 $('.botones button:not(.siguiente)').text("Clica aquí para cambiar el texto");
+            }
+
+            function imagen() {
+                $('#modalImagen').modal();
+            }
+
+            function subirImagen(e) {
+                e.preventDefault();
+                var fd = new FormData(this);
+
+                $.ajax({
+                    url: "<?= base_url('creadores/subir_imagen') ?>",
+                    async: false,
+                    type: 'post',
+                    contentType: false,
+                    processData: false,
+                    data: fd,
+                    success: function(res) {
+                        if (res !== '') {
+                            alert(typeof res);
+                            $(".errores").html(res);
+                            return;
+                        }
+
+                        $('#ficha').css({
+                            backgroundImage: "url(/images/juegos/"+id_ficha+".jpg)",
+                            backgroundRepeat: "no-repeat",
+                            backgroundPosition: "center"
+                        });
+                        $('#modalImagen').modal('hide');
+                    }
+                });
+            }
+
+            function cancelaImagen(e) {
+                e.preventDefault();
+                $('#modalImagen').modal('hide');
             }
         </script>
 
@@ -701,7 +750,7 @@
                                 <li><span value="#55AA55">Verde</span></li>
                             </ul>
                         </li>
-                        <li class="img"><a href="">Imagen</a></li>
+                        <li class="img"><span>Imagen<span></li>
                     </ul>
                 </div>
                 <div class="group">
@@ -736,6 +785,33 @@
             </nav>
             <?= login() ?>
         </header>
+        <!-- Modal -->
+        <div class="modal fade" id="modalImagen" tabindex="-1" role="dialog"
+            aria-labelledby="imagen" aria-hidden="true" data-backdrop="static"
+            data-keyboard="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="cabeceraImagen">
+                            Subir imagen
+                        </h4>
+                    </div>
+                    <!-- Modal Body -->
+                    <div class="modal-body">
+                        <div class="errores"></div>
+                        <form role="form" id="form-img">
+                            <input type="file" accept="image/*" name="imagen" id="imagen" />
+                            <button class="btn btn-success">Subir</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer footer-img">
+                        <button class="btn btn-danger">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Modal -->
         <div class="modal fade" id="modalJuego" tabindex="-1" role="dialog"
             aria-labelledby="nombre-juego" aria-hidden="true" data-backdrop="static"

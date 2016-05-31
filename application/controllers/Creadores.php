@@ -174,4 +174,28 @@ class Creadores extends CI_Controller {
         header('Content-Type: application/json');
         echo json_encode($lista);
     }
+
+    public function subir_imagen() {
+        $id_ficha = $this->session->userdata('ficha')['actual'];
+
+        $config['upload_path'] = './images/juegos/';
+        $config['allowed_types'] = 'jpg';
+        $config['overwrite'] = TRUE;
+        $config['max_width'] = '1280';
+        $config['max_height'] = '720';
+        $config['max_size'] = '40000';
+        $config['file_name'] = $id_ficha . '.jpg';
+
+        $this->load->library('upload', $config);
+
+        foreach ($_FILES as $key => $value);
+
+        if (!$this->upload->do_upload($key)) {
+            $errores = $this->upload->display_errors();
+            echo $errores;
+        } else {
+            $this->upload->data();
+            $this->Creador->imagen($id_ficha);
+        }
+    }
 }

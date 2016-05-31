@@ -213,3 +213,11 @@ aside ul li:before {
 .ocultoTitl button, .ocultoText button {
     margin-top: 5px;
 }
+
+#modalImagen button {
+    margin-top: 5px;
+}
+
+.errores {
+    color: #a94446;
+}

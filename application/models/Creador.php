@@ -125,4 +125,10 @@ class Creador extends CI_Model{
             return array('display' => TRUE, 'lista' => $lista);
         }
     }
+
+    public function imagen($id_ficha) {
+        $this->db->query('update fichas
+                             set imagen = true
+                           where id_ficha = ?', array($id_ficha));
+    }
 }
