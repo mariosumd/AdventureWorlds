@@ -62,10 +62,12 @@
             var id_ficha;
             var id_juego;
             var id_usuario;
+            var ventana = null;
             <?= nuevo_juego() ?>
 
             $(document).ready(function() {
-                $('#logout').on("click", delCookie);
+                $('#logout').on('click', delCookie);
+                $('.nueva button').on('click', nueva);
                 $('#formJuego button').on('click', nombreJuego);
                 $('#form-otrojuego button').on('click', cargaJuego);
                 $('#modalFicha button').on('click', nombreFicha);
@@ -76,7 +78,10 @@
                 $('.colBot span').on('click', colorBotones);
                 $('.numBot span').on('click', numBotones);
                 $('.final span').on('click', fichaFinal);
+                $('.borrar span').on('click', confirmar);
                 $('.img > span').on('click', imagen);
+                $('.borrar-juego > span').on('click', confirmar);
+                $('.final-juego > span').on('click', confirmar);
                 $('#form-img').on('submit', subirImagen);
                 $('.footer-img > button').on('click', cancelaImagen);
                 $('.botones button:not(.siguiente)').on('click', contenidoBoton);
@@ -86,12 +91,36 @@
                 $('#ficha > p').on('click', textarea);
                 $('.ocultoText > button:first-of-type').on('click', contenido);
                 $('.ocultoText > button:last-of-type').on('click', cancelaContenido);
+                $('#form-confirm button:first-of-type').on('click', compruebaConfirm);
+                $('#form-confirm button:last-of-type').on('click', cancelaConfirm);
                 $('.siguiente').on('click', siguienteFicha);
                 $('aside > div').on('click', cargaFichaLista);
+                $('.unlock img').on('click', abreVentana);
                 //$(window).on('beforeunload', confirmarSalida);
                 //$(window).on('unload', borraJuego);
                 cookie();
             });
+
+            function abreVentana() {
+                $('header').attr('style', 'display: none !important');
+                var nombre_juego = $('header h3').text();
+                $('.ventana h4').text(nombre_juego);
+                $('.ventana').fadeIn();
+                $('.ventana').css({
+                    width: '100%',
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'space-around',
+                    marginTop: 0
+                });
+                ventana = window.open("<?= base_url('creadores/ventana') ?>",
+                                        "width="+screen.width+",height=100");
+            }
+
+            function recuperaNav() {
+                $('header').attr('style', 'display: flex !important');
+                $('.ventana').fadeOut();
+            }
 
             function cookie() {
                 <?php if (logueado()): ?>
@@ -107,14 +136,104 @@
                 $.removeCookie('usuario');
             }
 
-            function borraJuego() {
+            function confirmar() {
+                var span = $(this).attr('value');
+
+                $('#cabeceraConfirm > span').text(span);
+                var input = $('<input>').attr({
+                    type: 'hidden',
+                    id: 'hiddenConfirm'
+                })
+
+                switch(span) {
+                    case "borrar la ficha":
+                        if (id_ficha === null) return;
+                        $(input).attr('value', "borraFicha");
+                        break;
+                    case "borrar el juego": $(input).attr('value', "borraJuego"); break;
+                    case "finalizar el juego": $(input).attr('value', "finaliza"); break;
+                }
+                $('#form-confirm').append(input);
+                $('#modalConfirm').modal();
+            }
+
+            function cancelaConfirm(e = null) {
+                if (e !== null) { e.preventDefault(); }
+                $('#modalConfirm').modal('hide');
+                $('#form-confirm > input:hidden').remove();
+                $('#cabeceraConfirm > span').text('');
+            }
+
+            function compruebaConfirm(e) {
+                e.preventDefault();
+                var opcion = $('#form-confirm > input:hidden').val();
+
+                switch (opcion) {
+                    case 'borraFicha': borraFicha(); break;
+                    case 'borraJuego': borraJuego(); break;
+                    case 'finaliza'  : finalizaJuego(); break;
+                }
+                cancelaConfirm();
+            }
+
+
+            function finalizaJuego() {
                 $.ajax({
-                    url: "<?= base_url('creadores/borrar_juego') ?>",
+                    url: "<?= base_url('creadores/finalizar_juego') ?>",
                     method: 'POST',
                     data: {
                         'id_juego': id_juego
+                    },
+                    success: function() {
+                        cancelaConfirm();
+                        window.location.replace("<?= base_url('portal/index') ?>");
                     }
                 });
+            }
+
+            function borraJuego() {
+                if (confirm('¿Estás seguro de borrar el juego?')) {
+                    $.ajax({
+                        url: "<?= base_url('creadores/borrar_juego') ?>",
+                        method: 'POST',
+                        data: {
+                            'id_juego': id_juego
+                        },
+                        success: function() {
+                            window.location.replace("<?= base_url('portal/index') ?>");
+                        }
+                    });
+                }
+            }
+
+            function borraFicha() {
+                if (id_ficha === null) return;
+                $.ajax({
+                    url: "<?= base_url('creadores/borrar_ficha') ?>",
+                    method: 'POST',
+                    data: {
+                        'id_ficha': id_ficha
+                    }
+                });
+
+
+                var div = document.getElementById(id_ficha);
+                $(div).remove();
+                var clases = document.getElementsByClassName(id_ficha);
+                $(clases).remove();
+
+                if ($('aside > div').length < 1) {
+                    id_ficha = null;
+                    $('#ficha').fadeOut();
+                    var button = $('<button></button>').text('Crear primera ficha').addClass('btn btn-default');
+                    $('#contenido').append($('<div></div>').addClass('nueva').append(button));
+                    $('.nueva button').on('click', nueva);
+                    $('#modalJuego').modal('hide');
+                } else {
+                    var primeraFicha = $('aside div:first-of-type').attr('id');
+                    cargaFicha(primeraFicha);
+                    id_ficha = primeraFicha;
+                }
             }
 
             function idFicha() {
@@ -135,14 +254,15 @@
                 $('aside').append(div);
             }
 
-            function cargaFichaAside(idFicha, titulo, siguiente1, siguiente2) {
+            function cargaFichaAside(idFicha, titulo, id_siguiente1, id_siguiente2,
+                                        siguiente1, siguiente2) {
                 anadeFichaAside(idFicha, titulo);
                 if (siguiente1 !== null && siguiente1 !== '') {
-                    var li = $('<li></li>').text(siguiente1);
+                    var li = $('<li></li>').text(siguiente1).addClass(id_siguiente1);
                     $(document.getElementById(idFicha)).find('ul').prepend(li);
                 }
                 if (siguiente2 !== null && siguiente2 !== '') {
-                    var li = $('<li></li>').text(siguiente2);
+                    var li = $('<li></li>').text(siguiente2).addClass(id_siguiente1);
                     $(document.getElementById(idFicha)).find('ul').append(li);
                 }
             }
@@ -164,15 +284,32 @@
             }
 
             function fichaFinal() {
-                $.ajax({
-                    url: "<?= base_url('creadores/ficha_final') ?>",
-                    method: 'POST',
-                    data: {
-                        'id_ficha': id_ficha
-                    }
-                });
+                if (id_ficha === null) return;
+                if ($('.final > span').val() === 'f') {
+                    $.ajax({
+                        url: "<?= base_url('creadores/ficha_final') ?>",
+                        method: 'POST',
+                        data: {
+                            'id_ficha': id_ficha,
+                            'val': true
+                        }
+                    });
 
-                $('.botones').fadeOut();
+                    $('.final > span').val('t');
+                    $('.botones').fadeOut();
+                } else {
+                    $.ajax({
+                        url: "<?= base_url('creadores/ficha_final') ?>",
+                        method: 'POST',
+                        data: {
+                            'id_ficha': id_ficha,
+                            'val': false
+                        }
+                    });
+
+                    $('.final > span').val('f');
+                    $('.botones').fadeIn();
+                }
             }
 
             function juego() {
@@ -220,15 +357,25 @@
 
                 for (var i = 0; i < fichas.length; i++) {
                     cargaFichaAside(fichas[i].id_ficha, fichas[i].titulo,
+                                    fichas[i].id_siguiente1, fichas[i].id_siguiente2,
                                     fichas[i].siguiente1, fichas[i].siguiente2);
                     if (fichas[i].final === 't') asideFinal(fichas[i].id_ficha);
                 }
-
-                $('header > h3').text(nombre_juego);
-                id_ficha = fichas[0].id_ficha;
-                asideInicio(id_ficha);
-                cargaFicha(id_ficha);
-                $('#modalJuego').modal('hide');
+                if ($('aside > div').length < 1) {
+                    $('header > h3').text(nombre_juego);
+                    id_ficha = null;
+                    $('#ficha').fadeOut();
+                    var button = $('<button></button>').text('Crear primera ficha').addClass('btn btn-default');
+                    $('#contenido').append($('<div></div>').addClass('nueva').append(button));
+                    $('.nueva button').on('click', nueva);
+                    $('#modalJuego').modal('hide');
+                } else {
+                    $('header > h3').text(nombre_juego);
+                    id_ficha = fichas[0].id_ficha;
+                    asideInicio(id_ficha);
+                    cargaFicha(id_ficha);
+                    $('#modalJuego').modal('hide');
+                }
             }
 
             function nombreJuego(e) {
@@ -261,6 +408,10 @@
                 $('#modalFicha').modal();
             }
 
+            function nueva() {
+                $('#modalFicha').modal();
+            }
+
             function nombreFicha(e) {
                 e.preventDefault();
                 var nombre_ficha = $('#nombre-ficha').val();
@@ -278,6 +429,8 @@
 
                 $('.titulo').text(nombre_ficha === '' || nombre_ficha === null ?
                                   'Clica aquí para cambiar el título' : nombre_ficha);
+                $('.nueva').fadeOut('fast', function () {$('.nueva').remove()});
+                $('#ficha').fadeIn();
                 $('#modalFicha').modal('hide');
 
                 id_ficha = $.ajax({
@@ -301,6 +454,7 @@
             }
 
             function colorFondo() {
+                if (id_ficha === null) return;
                 var color = $(this).attr("value");
 
                 $.ajax({
@@ -316,16 +470,20 @@
                 if (color === "#000000") {
                     $('#ficha p').animate({color: '#FFFFFF'}, 'fast');
                     $('#ficha h4').animate({color: '#0093c6'}, 'fast');
+                    $('#ficha label').animate({color: '#FFFFFF'}, 'fast');
                 } else if (color === "#4B698B") {
                     $('#ficha p').animate({color: '#FFFFFF'}, 'fast')
                     $('#ficha h4').animate({color: '#FFFFFF'}, 'fast');
+                    $('#ficha label').animate({color: '#FFFFFF'}, 'fast');
                 } else {
                     $('#ficha p').animate({color: '#000000'}, 'fast');
                     $('#ficha h4').animate({color: '#0093c6'}, 'fast');
+                    $('#ficha label').animate({color: '#000000'}, 'fast');
                 }
             }
 
             function numBotones() {
+                if (id_ficha === null) return;
                 var bool = $(this).attr("value");
 
                 $.ajax({
@@ -351,6 +509,7 @@
             }
 
             function colorBotones() {
+                if (id_ficha === null) return;
                 var color = $(this).attr("value");
 
                 $.ajax({
@@ -558,8 +717,8 @@
                     success: function() {
                         $('#modalFichaNueva').modal('hide');
                         var ficha = document.getElementById(id_ficha);
-                        if (boton === "1") $(ficha).find('ul').prepend($('<li></li>').text(titulo));
-                        else $(ficha).find('ul').append($('<li></li>').text(titulo));
+                        if (boton === "1") $(ficha).find('ul').prepend($('<li></li>').text(titulo).addClass(id_ficha));
+                        else $(ficha).find('ul').append($('<li></li>').text(titulo).addClass(id_ficha));
                         $('#ficha').fadeOut(500, function(){
                             resetStyle();
                             idFicha();
@@ -589,10 +748,10 @@
                     success: function() {
                         $('#modalFichaNueva').modal('hide');
                         var ficha = document.getElementById(id_ficha);
-                        if (boton === "1") $(ficha).find('ul').prepend($('<li></li>').text(titulo));
-                        else $(ficha).find('ul').append($('<li></li>').text(titulo));
+                        if (boton === "1") $(ficha).find('ul').prepend($('<li></li>').text(titulo).addClass(id_ficha));
+                        else $(ficha).find('ul').append($('<li></li>').text(titulo).addClass(id_ficha));
                         $('#ficha').fadeOut(500, function(){
-                            idFicha();
+                            id_ficha = id;
                             cargaFicha(id_ficha);
                             $('#ficha').fadeIn(500);
                             destacaAside(id_ficha);
@@ -638,11 +797,14 @@
                     id_ficha = id;
 
                     if (res.final === "t") {
+                        $('.final > span').val('t');
                         $('.botones').fadeOut();
                     } else if (res.botones === "t") {
+                        $('.final > span').val('f');
                         $('.botones button:last-child').fadeOut();
                         $('.botones button:nth-child(3)').fadeOut();
                     } else {
+                        $('.final > span').val('f');
                         $('.botones button:last-child').fadeIn();
                         $('.fichas-siguientes button:last-child').fadeIn();
                     }
@@ -661,12 +823,15 @@
                         if (res.color_ficha === "#000000") {
                             $('#ficha p').animate({color: '#FFFFFF'}, 'fast');
                             $('#ficha h4').animate({color: '#0093c6'}, 'fast');
+                            $('#ficha label').animate({color: '#FFFFFF'}, 'fast');
                         } else if (res.color_ficha === "#4B698B") {
                             $('#ficha p').animate({color: '#FFFFFF'}, 'fast')
                             $('#ficha h4').animate({color: '#FFFFFF'}, 'fast');
+                            $('#ficha label').animate({color: '#FFFFFF'}, 'fast');
                         } else {
                             $('#ficha p').animate({color: '#000000'}, 'fast');
                             $('#ficha h4').animate({color: '#0093c6'}, 'fast');
+                            $('#ficha label').animate({color: '#000000'}, 'fast');
                         }
                     }
 
@@ -693,12 +858,14 @@
             }
 
             function imagen() {
+                if (id_ficha === null) return;
                 $('#modalImagen').modal();
             }
 
             function subirImagen(e) {
                 e.preventDefault();
                 var fd = new FormData(this);
+                var randomId = new Date().getTime();
 
                 $.ajax({
                     url: "<?= base_url('creadores/subir_imagen') ?>",
@@ -709,13 +876,13 @@
                     data: fd,
                     success: function(res) {
                         if (res !== '') {
-                            alert(typeof res);
                             $(".errores").html(res);
                             return;
                         }
 
+                        $('#ficha').css({backgroundImage: ''});
                         $('#ficha').css({
-                            backgroundImage: "url(/images/juegos/"+id_ficha+".jpg)",
+                            backgroundImage: "url(/images/juegos/"+id_ficha+".jpg?random="+randomId+")",
                             backgroundRepeat: "no-repeat",
                             backgroundPosition: "center"
                         });
@@ -734,7 +901,7 @@
             <?= anchor('/portal/index', img(array('src' => 'images/logo.png',
                                                   'alt' => 'logo',
                                                   'class' => 'logo'))) ?>
-            <h3><?= nombre_juego() ?></h3>
+            <h3></h3>
             <nav>
                 <div class="group">
                     <h4>Fondo</h4>
@@ -779,12 +946,49 @@
                 <div class="group">
                     <h4>Ficha</h4>
                     <ul>
-                        <li class="final"><span>Final</span></li>
+                        <li class="final"><span value="f">Final</span></li>
+                        <li class="borrar"><span value="borrar la ficha">Borrar</span></li>
                     </ul>
+                </div>
+                <div class="group">
+                    <h4>Juego</h4>
+                    <ul>
+                        <li class="final-juego"><span value="finalizar el juego">Finalizar</span></li>
+                        <li class="borrar-juego"><span value="borrar el juego">Borrar</span></li>
+                    </ul>
+                </div>
+                <div class="group unlock">
+                    <img src="<?= base_url() ?>images/unlock.png"
+                        title="Abrir barra de edición en otra ventana"
+                        alt="Abrir barra de edición en otra ventana" />
                 </div>
             </nav>
             <?= login() ?>
         </header>
+        <!-- Modal -->
+        <div class="modal fade" id="modalConfirm" tabindex="-1" role="dialog"
+            aria-labelledby="imagen" aria-hidden="true" data-backdrop="static"
+            data-keyboard="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="cabeceraConfirm">
+                            ¿Estás seguro de que quieres <span></span>?
+                        </h4>
+                    </div>
+                    <!-- Modal Body -->
+                    <div class="modal-body">
+                        <div class="errores"></div>
+                        <form role="form" id="form-confirm">
+                            <button Class="btn btn-success">Sí</button>
+                            <button class="btn btn-success">No</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Modal -->
         <div class="modal fade" id="modalImagen" tabindex="-1" role="dialog"
             aria-labelledby="imagen" aria-hidden="true" data-backdrop="static"
@@ -918,9 +1122,16 @@
         </div>
 
         <div id="contenido">
+            <?= mensajes() ?>
             <aside><h4>Fichas</h4></aside>
             <div id="ficha">
-                <?= mensajes() ?>
+                <div class="ventana">
+                    <a href="<?= base_url('portal/index') ?>">
+                        <img src="<?= base_url() ?>images/logo_letras.png" />
+                    </a>
+                    <h4></h4>
+                    <?= login() ?>
+                </div>
                 <h4 class="titulo"></h4>
                 <div class="ocultoTitl form-group">
                     <?= form_label('Titulo:', 'titulo') ?>

@@ -39,10 +39,10 @@ class Creador extends CI_Model{
         return $res->row_array()['id_juego'];
     }
 
-    public function ficha_final($id_ficha) {
+    public function ficha_final($id_ficha, $val) {
         $this->db->query('update fichas
-                             set final = true
-                           where id_ficha = ?', array($id_ficha));
+                             set final = ?
+                           where id_ficha = ?', array($val, $id_ficha));
     }
 
     public function nueva_ficha($id_juego, $nombre_ficha) {
@@ -91,12 +91,6 @@ class Creador extends CI_Model{
                            where id_ficha = ?', array($contenido, $id_ficha));
     }
 
-    public function ficha_anterior($id_ficha, $id_anterior) {
-        $this->db->query('update fichas
-                             set id_anterior = ?
-                           where id_ficha = ?', array($id_anterior, $id_ficha));
-    }
-
     public function ficha_siguiente($id_ficha, $id_siguiente, $boton) {
         $boton = 'id_siguiente'.$boton;
 
@@ -130,5 +124,14 @@ class Creador extends CI_Model{
         $this->db->query('update fichas
                              set imagen = true
                            where id_ficha = ?', array($id_ficha));
+    }
+
+    public function borrar_ficha($id_ficha) {
+        $this->db->query('delete from fichas where id_ficha = ?', array($id_ficha));
+    }
+
+    public function finalizar_juego($id_juego) {
+        $this->db->query('update juegos set finalizado = true where id_juego = ?',
+                            array($id_juego));
     }
 }

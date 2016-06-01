@@ -19,8 +19,11 @@ create table usuarios (
     email               varchar(100) not null constraint uq_email_usuarios unique,
     registro_verificado boolean      not null default false,
     admin               boolean      not null default false,
-    activado            bool         not null default true
+    activado            boolean      not null default true
 );
+
+insert into usuarios (nombre, password, email, registro_verificado)
+    values ('MarioSumD', crypt('MarioSumD', gen_salt('bf')), 'mariosumd@gmail.com', true);
 
 drop table if exists juegos cascade;
 
@@ -41,13 +44,13 @@ create table fichas (
                                         on delete cascade,
     id_anterior   bigint  constraint fk_ficha_anterior
                                         references fichas (id_ficha)
-                                        on delete cascade,
+                                        on delete set null,
     id_siguiente1 bigint  constraint fk_ficha_siguiente1
                                         references fichas (id_ficha)
-                                        on delete cascade,
+                                        on delete set null,
     id_siguiente2 bigint  constraint fk_ficha_siguiente2
                                         references fichas (id_ficha)
-                                        on delete cascade,
+                                        on delete set null,
     titulo        varchar (50),
     final         boolean default false,
     botones       boolean default false,
@@ -56,8 +59,6 @@ create table fichas (
     color_boton   varchar(10),
     color_ficha   varchar(10),
     imagen        boolean default false,
-    jefe          boolean default false,
-    jefe_anim     boolean default false,
     contenido     varchar(500)
 );
 
@@ -80,8 +81,8 @@ create view v_juegos_pendientes as
     where finalizado = false;
 
 create view v_fichas_formateadas as
-    select f.titulo, f.id_ficha, f.id_juego, f.final, u.titulo as siguiente1,
-           d.titulo as siguiente2,
+    select f.titulo, f.id_ficha, f.id_juego, f.final, f.id_siguiente1,
+           f.id_siguiente2, u.titulo as siguiente1, d.titulo as siguiente2
     from fichas f
     left join fichas u on f.id_siguiente1 = u.id_ficha
     left join fichas d on f.id_siguiente2 = d.id_ficha;

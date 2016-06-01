@@ -12,6 +12,10 @@ class Creadores extends CI_Controller {
         }
     }
 
+    public function ventana() {
+        $this->load->view('creador/ventana');
+    }
+
     public function lista_juegos() {
         $id_usuario = $this->input->post('id_usuario');
         $lista = $this->Creador->lista_juegos($id_usuario);
@@ -31,11 +35,14 @@ class Creadores extends CI_Controller {
     public function borrar_juego() {
         $id_juego = $this->input->post('id_juego');
         $this->Creador->borrar_juego($id_juego);
+        $mensajes[] = array('info' => 'Juego borrado satisfactoriamente.');
+        $this->flashdata->load($mensajes);
     }
 
     public function ficha_final() {
         $id_ficha = $this->input->post('id_ficha');
-        $this->Creador->ficha_final($id_ficha);
+        $val = $this->input->post('val');
+        $this->Creador->ficha_final($id_ficha, $val);
     }
 
     public function nuevo() {
@@ -119,7 +126,6 @@ class Creadores extends CI_Controller {
                                                 'actual' => $id_ficha,
                                                 'anterior' => $id_anterior));
 
-        $this->Creador->ficha_anterior($id_ficha, $id_anterior);
         $this->Creador->ficha_siguiente($id_ficha, $id_anterior, $boton);
     }
 
@@ -197,5 +203,18 @@ class Creadores extends CI_Controller {
             $this->upload->data();
             $this->Creador->imagen($id_ficha);
         }
+    }
+
+    public function borrar_ficha() {
+        $id_ficha = $this->input->post('id_ficha');
+        $this->Creador->borrar_ficha($id_ficha);
+    }
+
+    public function finalizar_juego() {
+        $id_juego = $this->input->post('id_juego');
+
+        $this->Creador->finalizar_juego($id_juego);
+        $mensajes[] = array('info' => '¡Juego terminado!');
+        $this->flashdata->load($mensajes);
     }
 }
