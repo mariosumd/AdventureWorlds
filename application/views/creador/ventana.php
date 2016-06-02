@@ -59,22 +59,37 @@
     </head>
     <body>
         <script>
-        $(document).ready(function() {
-            $('.colFon span').on('click', window.opener.colorFondo);
-            $('.img > span').on('click', window.opener.imagen);
-            $('.colBot span').on('click', window.opener.colorBotones);
-            $('.numBot span').on('click', window.opener.numBotones);
-            $('.final span').on('click', window.opener.fichaFinal);
-            $('.borrar span').on('click', window.opener.confirmar);
-            $('.borrar-juego > span').on('click', window.opener.confirmar);
-            $('.final-juego > span').on('click', window.opener.confirmar);
-            $('.unlock img').on('click', cierraVentana);
+            $(document).ready(function() {
+                if (window.opener === null) window.location.href = "<?= base_url('portal/index') ?>";
+                interval = setInterval(function() {
+                    if (window.opener === null ||
+                        window.opener.location.href !== "<?= base_url('creadores/index') ?>") {
+                        clearInterval(interval);
+                        window.close();
+                    }
+                }, 500);
+                $('.colFon span').on('click', window.opener.colorFondo);
+                $('.img > span').on('click', window.opener.imagen);
+                $('.colBot span').on('click', window.opener.colorBotones);
+                $('.numBot span').on('click', window.opener.numBotones);
+                $('.final span').on('click', window.opener.fichaFinal);
+                $('.borrar span').on('click', window.opener.confirmar);
+                $('.borrar-juego > span').on('click', window.opener.confirmar);
+                $('.final-juego > span').on('click', window.opener.confirmar);
+                $('.unlock img').on('click', cierraVentana);
+            });
 
             function cierraVentana() {
+                clearInterval(interval);
                 window.opener.recuperaNav();
                 window.close();
             }
-        });
+
+            function trigger() {
+                alert('hola');
+            }
+
+
         </script>
         <header>
             <?= img(array('src' => 'images/logo.png', 'alt' => 'logo', 'class' => 'logoWin')) ?>

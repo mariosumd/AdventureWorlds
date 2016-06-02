@@ -26,7 +26,12 @@ class Creadores extends CI_Controller {
 
     public function cargar_juego() {
         $id_juego = $this->input->post('id_juego');
+        $nombre_juego = $this->input->post('nombre_juego');
         $fichas = $this->Creador->cargar_juego($id_juego);
+        
+        $this->session->set_userdata('juego', array(
+            'id' => $id_juego,
+            'nombre' => $nombre_juego));
 
         header('Content-Type: application/json');
         echo json_encode($fichas);

@@ -96,28 +96,45 @@
                 $('.siguiente').on('click', siguienteFicha);
                 $('aside > div').on('click', cargaFichaLista);
                 $('.unlock img').on('click', abreVentana);
-                //$(window).on('beforeunload', confirmarSalida);
-                //$(window).on('unload', borraJuego);
+                $(window).on('beforeunload', confirmaSalida);
                 cookie();
             });
 
+            function confirmaSalida() {
+                return '¿Estás seguro de que quieres salir?';
+            }
+
             function abreVentana() {
+                ventana = window.open("<?= base_url('creadores/ventana') ?>", '',
+                                        "width="+screen.width+",height=290,location=0");
+
+                if (ventana === null) {
+                    alert('Se ha bloqueado la ventana.');
+                    return;
+                }
+                interval = setInterval(function() {
+                    if (ventana.closed) {
+                        recuperaNav();
+                    }
+                }, 500);
                 $('header').attr('style', 'display: none !important');
                 var nombre_juego = $('header h3').text();
                 $('.ventana h4').text(nombre_juego);
                 $('.ventana').fadeIn();
                 $('.ventana').css({
-                    width: '100%',
+                    width: '80%',
                     display: 'flex',
                     flexDirection: 'row',
                     justifyContent: 'space-around',
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
+                    marginBottom: 0,
                     marginTop: 0
                 });
-                ventana = window.open("<?= base_url('creadores/ventana') ?>",
-                                        "width="+screen.width+",height=100");
             }
 
             function recuperaNav() {
+                clearInterval(interval);
                 $('header').attr('style', 'display: flex !important');
                 $('.ventana').fadeOut();
             }
@@ -224,7 +241,7 @@
 
                 if ($('aside > div').length < 1) {
                     id_ficha = null;
-                    $('#ficha').fadeOut();
+                    $('#ficha > *').not('.ventana').fadeOut();
                     var button = $('<button></button>').text('Crear primera ficha').addClass('btn btn-default');
                     $('#contenido').append($('<div></div>').addClass('nueva').append(button));
                     $('.nueva button').on('click', nueva);
@@ -331,7 +348,7 @@
                         $('#nombre-otrojuego').append(option);
                     }
                     $('hr').fadeIn();
-                    $('#form-otrojuego').fadeIn();
+                    $('#form-otrojuego');
                 } else {
                     $('hr').fadeOut();
                     $('#form-otrojuego').fadeOut();
@@ -351,7 +368,8 @@
                     async: false,
                     dataType: 'json',
                     data: {
-                        'id_juego': id_juego
+                        'id_juego': id_juego,
+                        'nombre_juego': nombre_juego
                     }
                 }).responseJSON;
 
@@ -364,7 +382,7 @@
                 if ($('aside > div').length < 1) {
                     $('header > h3').text(nombre_juego);
                     id_ficha = null;
-                    $('#ficha').fadeOut();
+                    $('#ficha > *:not(.ventana)').fadeOut();
                     var button = $('<button></button>').text('Crear primera ficha').addClass('btn btn-default');
                     $('#contenido').append($('<div></div>').addClass('nueva').append(button));
                     $('.nueva button').on('click', nueva);
@@ -470,15 +488,18 @@
                 if (color === "#000000") {
                     $('#ficha p').animate({color: '#FFFFFF'}, 'fast');
                     $('#ficha h4').animate({color: '#0093c6'}, 'fast');
-                    $('#ficha label').animate({color: '#FFFFFF'}, 'fast');
+                    $('.ventana h4').animate({color: '#0093c6'}, 'fast');
+                    $('.ventana label').animate({color: '#FFFFFF'}, 'fast');
                 } else if (color === "#4B698B") {
                     $('#ficha p').animate({color: '#FFFFFF'}, 'fast')
                     $('#ficha h4').animate({color: '#FFFFFF'}, 'fast');
-                    $('#ficha label').animate({color: '#FFFFFF'}, 'fast');
+                    $('.ventana h4').animate({color: '#FFFFFF'}, 'fast');
+                    $('.ventana label').animate({color: '#FFFFFF'}, 'fast');
                 } else {
                     $('#ficha p').animate({color: '#000000'}, 'fast');
                     $('#ficha h4').animate({color: '#0093c6'}, 'fast');
-                    $('#ficha label').animate({color: '#000000'}, 'fast');
+                    $('.ventana h4').animate({color: '#0093c6'}, 'fast');
+                    $('.ventana label').animate({color: '#000000'}, 'fast');
                 }
             }
 
@@ -719,12 +740,12 @@
                         var ficha = document.getElementById(id_ficha);
                         if (boton === "1") $(ficha).find('ul').prepend($('<li></li>').text(titulo).addClass(id_ficha));
                         else $(ficha).find('ul').append($('<li></li>').text(titulo).addClass(id_ficha));
-                        $('#ficha').fadeOut(500, function(){
+                        $('#ficha > *').not('.ventana').fadeOut(500, function(){
                             resetStyle();
                             idFicha();
                             $('.titulo').text(titulo === '' || titulo === null ?
                                               'Clica aquí para cambiar el título' : titulo);
-                            $('#ficha').fadeIn(500);
+                            $('#ficha').fadeIn(500).stop(true, true);
                             anadeFichaAside(id_ficha, titulo);
                             destacaAside(id_ficha);
                         });
@@ -750,10 +771,10 @@
                         var ficha = document.getElementById(id_ficha);
                         if (boton === "1") $(ficha).find('ul').prepend($('<li></li>').text(titulo).addClass(id_ficha));
                         else $(ficha).find('ul').append($('<li></li>').text(titulo).addClass(id_ficha));
-                        $('#ficha').fadeOut(500, function(){
+                        $('#ficha > *').not('.ventana').fadeOut(500, function(){
                             id_ficha = id;
                             cargaFicha(id_ficha);
-                            $('#ficha').fadeIn(500);
+                            $('#ficha').fadeIn(500).stop(true, true);
                             destacaAside(id_ficha);
                         });
                     }
@@ -776,7 +797,7 @@
                     }
                 }).responseJSON;
 
-                $("#ficha").fadeOut(500, function() {
+                $("#ficha").not('.ventana').fadeOut(500, function() {
                     resetStyle();
 
                     var contenido = res.contenido === null || res.contenido === "" ?
@@ -823,15 +844,18 @@
                         if (res.color_ficha === "#000000") {
                             $('#ficha p').animate({color: '#FFFFFF'}, 'fast');
                             $('#ficha h4').animate({color: '#0093c6'}, 'fast');
-                            $('#ficha label').animate({color: '#FFFFFF'}, 'fast');
+                            $('.ventana h4').animate({color: '#0093c6'}, 'fast');
+                            $('.ventana label').animate({color: '#FFFFFF'}, 'fast');
                         } else if (res.color_ficha === "#4B698B") {
                             $('#ficha p').animate({color: '#FFFFFF'}, 'fast')
                             $('#ficha h4').animate({color: '#FFFFFF'}, 'fast');
-                            $('#ficha label').animate({color: '#FFFFFF'}, 'fast');
+                            $('.ventana h4').animate({color: '#FFFFFF'}, 'fast');
+                            $('.ventana label').animate({color: '#FFFFFF'}, 'fast');
                         } else {
                             $('#ficha p').animate({color: '#000000'}, 'fast');
                             $('#ficha h4').animate({color: '#0093c6'}, 'fast');
-                            $('#ficha label').animate({color: '#000000'}, 'fast');
+                            $('.ventana h4').animate({color: '#0093c6'}, 'fast');
+                            $('.ventana label').animate({color: '#000000'}, 'fast');
                         }
                     }
 
@@ -851,7 +875,7 @@
 
             function resetStyle() {
                 $('body').animate({backgroundColor: 'white'}, 'fast');
-                $('*[style]').attr('style', '');
+                $('*[style]').not('header').not('.ventana').attr('style', '');
                 $('.titulo').text('');
                 $('#ficha p').text("Clica aquí para cambiar el contenido");
                 $('.botones button:not(.siguiente)').text("Clica aquí para cambiar el texto");
@@ -1124,7 +1148,7 @@
         <div id="contenido">
             <?= mensajes() ?>
             <aside><h4>Fichas</h4></aside>
-            <div id="ficha">
+            <div>
                 <div class="ventana">
                     <a href="<?= base_url('portal/index') ?>">
                         <img src="<?= base_url() ?>images/logo_letras.png" />
@@ -1132,38 +1156,40 @@
                     <h4></h4>
                     <?= login() ?>
                 </div>
-                <h4 class="titulo"></h4>
-                <div class="ocultoTitl form-group">
-                    <?= form_label('Titulo:', 'titulo') ?>
-                    <br />
-                    <span>Máximo 50 caracteres</span>
-                    <?= form_input('titulo', set_value('titulo', '', FALSE),
-                                    'class="form-control titulo"') ?>
-                    <button class="btn btn-success">Cambiar contenido</button>
-                    <button class="btn btn-danger">Cancelar</button>
-                </div>
+                <div id="ficha">
+                    <h4 class="titulo"></h4>
+                    <div class="ocultoTitl form-group">
+                        <?= form_label('Titulo:', 'titulo') ?>
+                        <br />
+                        <span>Máximo 50 caracteres</span>
+                        <?= form_input('titulo', set_value('titulo', '', FALSE),
+                                        'class="form-control titulo"') ?>
+                        <button class="btn btn-success">Cambiar contenido</button>
+                        <button class="btn btn-danger">Cancelar</button>
+                    </div>
 
-                <p class="contenido">Clica aquí para cambiar el contenido</p>
-                <div class="ocultoText form-group">
-                    <?= form_label('Contenido:', 'contenido') ?>
-                    <br />
-                    <span>Máximo 500 caracteres</span>
-                    <?= form_textarea('contenido', set_value('contenido', '', FALSE),
-                                      'class="form-control contenido"') ?>
-                    <button class="btn btn-success">Cambiar contenido</button>
-                    <button class="btn btn-danger">Cancelar</button>
+                    <p class="contenido">Clica aquí para cambiar el contenido</p>
+                    <div class="ocultoText form-group">
+                        <?= form_label('Contenido:', 'contenido') ?>
+                        <br />
+                        <span>Máximo 500 caracteres</span>
+                        <?= form_textarea('contenido', set_value('contenido', '', FALSE),
+                                          'class="form-control contenido"') ?>
+                        <button class="btn btn-success">Cambiar contenido</button>
+                        <button class="btn btn-danger">Cancelar</button>
+                    </div>
+                    <div class="botones">
+                        <button class="btn btn-success siguiente" value="<?= ficha_siguiente(1) ?>">
+                            <
+                        </button>
+                        <button class="btn btn-lg" value="1">Clica para cambiar el texto</button>
+                        <button class="btn btn-lg" value="2">Clica para cambiar el texto</button>
+                        <button class="btn btn-success siguiente" value="<?= ficha_siguiente(2) ?>">
+                            >
+                        </button>
+                    </div>
+                    <?= $contents ?>
                 </div>
-                <div class="botones">
-                    <button class="btn btn-success siguiente" value="<?= ficha_siguiente(1) ?>">
-                        <
-                    </button>
-                    <button class="btn btn-lg" value="1">Clica para cambiar el texto</button>
-                    <button class="btn btn-lg" value="2">Clica para cambiar el texto</button>
-                    <button class="btn btn-success siguiente" value="<?= ficha_siguiente(2) ?>">
-                        >
-                    </button>
-                </div>
-                <?= $contents ?>
             </div>
         </div>
         <!-- Latest compiled and minified JavaScript -->

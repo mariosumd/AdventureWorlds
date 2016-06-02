@@ -195,19 +195,19 @@ aside ul li:before {
     background-color: rgba(0, 147, 198, 1);
 }
 
+#contenido > div {
+    width: 100%;
+}
+
 #ficha {
     width: 70%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
     margin: auto;
-    margin-top: 0;
     text-align: center;
 }
 
 #ficha > * {
     margin: auto;
-    margin-top: 5em;
+    margin-top: 4em;
 }
 
 #ficha > h4 {
@@ -224,7 +224,7 @@ aside ul li:before {
 .botones {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: center;
 }
 
 .botones > button {
