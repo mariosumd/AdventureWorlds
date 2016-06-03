@@ -88,7 +88,18 @@
         </header>
         <div id="contenido">
             <?= mensajes() ?>
-            <?= crear() ?>
+            <div class="div-buttons">
+                <?= crear() ?>
+                <?= tutorial() ?>
+            </div>
+            <form role="form" id="buscar">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Buscar...">
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary" type="button">Buscar</button>
+                    </span>
+                </div>
+            </form>
             <?= $contents ?>
         </div>
         <footer>

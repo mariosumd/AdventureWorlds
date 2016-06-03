@@ -738,14 +738,14 @@
                     success: function() {
                         $('#modalFichaNueva').modal('hide');
                         var ficha = document.getElementById(id_ficha);
-                        if (boton === "1") $(ficha).find('ul').prepend($('<li></li>').text(titulo).addClass(id_ficha));
-                        else $(ficha).find('ul').append($('<li></li>').text(titulo).addClass(id_ficha));
-                        $('#ficha').fadeOut(500, function(){
+                        idFicha();
+                        $('#ficha').fadeOut(function(){
                             resetStyle();
-                            idFicha();
                             $('.titulo').text(titulo === '' || titulo === null ?
                                               'Clica aquí para cambiar el título' : titulo);
-                            $('#ficha').fadeIn(500).stop(true, true);
+                            $('#ficha').fadeIn().stop(true, true);
+                            if (boton === "1") $(ficha).find('ul').prepend($('<li></li>').text(titulo).addClass(id_ficha));
+                            else $(ficha).find('ul').append($('<li></li>').text(titulo).addClass(id_ficha));
                             anadeFichaAside(id_ficha, titulo);
                             destacaAside(id_ficha);
                         });
@@ -769,10 +769,11 @@
                     success: function() {
                         $('#modalFichaNueva').modal('hide');
                         var ficha = document.getElementById(id_ficha);
+                        id_ficha = id;
+                        alert(id_ficha);
                         if (boton === "1") $(ficha).find('ul').prepend($('<li></li>').text(titulo).addClass(id_ficha));
                         else $(ficha).find('ul').append($('<li></li>').text(titulo).addClass(id_ficha));
                         $('#ficha').fadeOut(500, function(){
-                            id_ficha = id;
                             cargaFicha(id_ficha);
                             $('#ficha').fadeIn(500).stop(true, true);
                             destacaAside(id_ficha);

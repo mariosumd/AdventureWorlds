@@ -44,6 +44,23 @@ function crear() {
   return $div;
 }
 
+function tutorial() {
+  $CI =& get_instance();
+
+  $div = "";
+
+  if ($CI->Usuario->logueado()):
+      $div .= '<a href="'.base_url('creadores/tutorial').'">';
+        $div  .= '<div class="creador">';
+            $div .= '<h3>¿Cómo creo mi aventura?</h3>';
+            $div .= '<h4>Tutorial aquí</h4>';
+        $div .= '</div>';
+      $div .= '</a>';
+  endif;
+
+  return $div;
+}
+
 function nuevo_juego() {
     $CI =& get_instance();
 

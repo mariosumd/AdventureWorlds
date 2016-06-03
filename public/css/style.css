@@ -85,6 +85,17 @@ div#contenido {
     width: 75%;
 }
 
+#buscar {
+    width: 60%;
+    margin-top: 20px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+#buscar input, #buscar button {
+    height: 3.5em;
+}
+
 p.small {
     font-size: 1em !important;
 }
@@ -174,19 +185,30 @@ footer > a:last-child {
 .user > label { margin-right: 0.5em; }
 #contenido > a { text-decoration: none; }
 
+.div-buttons {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.div-buttons a:hover { text-decoration: none; }
+
 .creador {
-    padding: 0;
+    padding-left: 4em;
+    padding-right: 4em;
+    margin: 20px;
     text-decoration: none;
     border: 1px solid black;
     border-radius: 25px;
     text-align: center;
-    width: 40%;
-    margin: auto;
+    width: 100%;
     background: linear-gradient(#888 0%, #FFF 50%, #888 100%);
     background: -webkit-linear-gradient(#888 0%, #FFF 50%, #888 100%);
     background: -moz-linear-gradient(#888 0%, #FFF 50%, #888 100%);
     background: -o-linear-gradient(#888 0%, #FFF 50%, #888 100%);
     cursor: pointer;
 }
-
-.creador > h3 {margin-top: 0.5em;}
+.creador > h3 { margin-top: 0.5em; }

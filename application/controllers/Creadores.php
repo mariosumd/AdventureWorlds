@@ -28,7 +28,7 @@ class Creadores extends CI_Controller {
         $id_juego = $this->input->post('id_juego');
         $nombre_juego = $this->input->post('nombre_juego');
         $fichas = $this->Creador->cargar_juego($id_juego);
-        
+
         $this->session->set_userdata('juego', array(
             'id' => $id_juego,
             'nombre' => $nombre_juego));
@@ -132,6 +132,7 @@ class Creadores extends CI_Controller {
                                                 'anterior' => $id_anterior));
 
         $this->Creador->ficha_siguiente($id_ficha, $id_anterior, $boton);
+        echo $id_ficha;
     }
 
     public function ligar_ficha() {

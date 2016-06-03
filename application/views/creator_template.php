@@ -209,18 +209,16 @@
             }
 
             function borraJuego() {
-                if (confirm('¿Estás seguro de borrar el juego?')) {
-                    $.ajax({
-                        url: "<?= base_url('creadores/borrar_juego') ?>",
-                        method: 'POST',
-                        data: {
-                            'id_juego': id_juego
-                        },
-                        success: function() {
-                            window.location.replace("<?= base_url('portal/index') ?>");
-                        }
-                    });
-                }
+                $.ajax({
+                    url: "<?= base_url('creadores/borrar_juego') ?>",
+                    method: 'POST',
+                    data: {
+                        'id_juego': id_juego
+                    },
+                    success: function() {
+                        window.location.replace("<?= base_url('portal/index') ?>");
+                    }
+                });
             }
 
             function borraFicha() {
@@ -738,11 +736,11 @@
                     success: function() {
                         $('#modalFichaNueva').modal('hide');
                         var ficha = document.getElementById(id_ficha);
-                        if (boton === "1") $(ficha).find('ul').prepend($('<li></li>').text(titulo).addClass(id_ficha));
-                        else $(ficha).find('ul').append($('<li></li>').text(titulo).addClass(id_ficha));
                         $('#ficha').fadeOut(500, function(){
                             resetStyle();
                             idFicha();
+                            if (boton === "1") $(ficha).find('ul').prepend($('<li></li>').text(titulo).addClass(id_ficha));
+                            else $(ficha).find('ul').append($('<li></li>').text(titulo).addClass(id_ficha));
                             $('.titulo').text(titulo === '' || titulo === null ?
                                               'Clica aquí para cambiar el título' : titulo);
                             $('#ficha').fadeIn(500).stop(true, true);
@@ -769,10 +767,10 @@
                     success: function() {
                         $('#modalFichaNueva').modal('hide');
                         var ficha = document.getElementById(id_ficha);
-                        if (boton === "1") $(ficha).find('ul').prepend($('<li></li>').text(titulo).addClass(id_ficha));
-                        else $(ficha).find('ul').append($('<li></li>').text(titulo).addClass(id_ficha));
                         $('#ficha').fadeOut(function(){
                             id_ficha = id;
+                            if (boton === "1") $(ficha).find('ul').prepend($('<li></li>').text(titulo).addClass(id_ficha));
+                            else $(ficha).find('ul').append($('<li></li>').text(titulo).addClass(id_ficha));
                             cargaFicha(id_ficha);
                             $('#ficha').fadeIn();
                             destacaAside(id_ficha);
