@@ -279,7 +279,7 @@
                     $(document.getElementById(idFicha)).find('ul').prepend(li);
                 }
                 if (siguiente2 !== null && siguiente2 !== '') {
-                    var li = $('<li></li>').text(siguiente2).addClass(id_siguiente2);
+                    var li = $('<li></li>').text(siguiente2).addClass(id_siguiente1);
                     $(document.getElementById(idFicha)).find('ul').append(li);
                 }
             }
@@ -756,7 +756,7 @@
             function ligarFicha(e) {
                 e.preventDefault();
                 var id = $('#nombre-otraficha').val();
-                var titulo = $('#nombre-otraficha option:selected').text();
+                var titulo = $('#nombre-otraficha').text();
                 var boton = $('#hiddenFicha').val();
 
                 $.ajax({
@@ -771,10 +771,10 @@
                         var ficha = document.getElementById(id_ficha);
                         if (boton === "1") $(ficha).find('ul').prepend($('<li></li>').text(titulo).addClass(id_ficha));
                         else $(ficha).find('ul').append($('<li></li>').text(titulo).addClass(id_ficha));
-                        $('#ficha').fadeOut(function(){
+                        $('#ficha').fadeOut(500, function(){
                             id_ficha = id;
                             cargaFicha(id_ficha);
-                            $('#ficha').fadeIn();
+                            $('#ficha').fadeIn(500).stop(true, true);
                             destacaAside(id_ficha);
                         });
                     }
