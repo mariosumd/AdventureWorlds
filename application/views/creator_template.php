@@ -312,6 +312,9 @@
 
                     $('.final > span').val('t');
                     $('.botones').fadeOut();
+                    var div = document.getElementById(id_ficha);
+                    var span = $('<span></span>').text('[FINAL]');
+                    $(div).prepend(span);
                 } else {
                     $.ajax({
                         url: "<?= base_url('creadores/ficha_final') ?>",
@@ -324,6 +327,8 @@
 
                     $('.final > span').val('f');
                     $('.botones').fadeIn();
+                    var div = document.getElementById(id_ficha);
+                    $(div).find('span').remove();
                 }
             }
 
@@ -603,6 +608,10 @@
                 $(div).find('p').text(titulo === null || titulo === '' ?
                                       '<Ficha sin título>' : titulo);
 
+                var spans = document.getElementsByClassName(id_ficha);
+                $(spans).text(titulo === null || titulo === '' ?
+                                      '<Ficha sin título>' : titulo);
+
                 $('.ocultoTitl').fadeOut();
                 $('h4.titulo').text(titulo === '' || titulo === null ?
                                     'Clica aquí para cambiar el título' : titulo)
@@ -825,7 +834,7 @@
                     } else {
                         $('.final > span').val('f');
                         $('.botones button:last-child').fadeIn();
-                        $('.fichas-siguientes button:last-child').fadeIn();
+                        $('.botones button:nth-child(3)').fadeIn();
                     }
 
                     if (res.color_boton !== null) {

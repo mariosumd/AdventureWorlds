@@ -59,6 +59,9 @@
         <script>
             $(document).ready(function() {
                 $('#logout').on("click", delCookie);
+                $('.creador').on("click", function() { $(this).parent().submit() });
+                $('#juegos form').on("click", function() {$(this).submit() });
+                $('#buscar').on('submit', buscar)
                 cookie();
             });
 
@@ -72,6 +75,37 @@
 
             function delCookie() {
                 $.removeCookie('usuario');
+            }
+
+            function buscar(e) {
+                e.preventDefault()
+                var busqueda = $("#buscar input:text").val();
+
+                var lista = $.ajax({
+                    url: "<?= base_url('portal/buscar') ?>",
+                    method: 'POST',
+                    dataType: 'json',
+                    async: false,
+                    data: {
+                        'busqueda': busqueda
+                    }
+                }).responseJSON;
+
+                if (lista.display === false) {
+                    $('#juegos').html('<h3>No se encontraron juegos...</h3>');
+                } else {
+                    $('#juegos').empty();
+                    for (var i = 0; i < lista.juegos.length; i++) {
+                        var form =
+                        $('<form method="post" action="<?= base_url('juegos/index') ?>">'+
+                              '<h5>'+lista.juegos[i].nombre_juego+'</h5>'+
+                              '<p>Creado por <span>'+lista.juegos[i].nombre_usuario+'</span></p>'+
+                              '<input type="hidden" name="id_juego" value="'+lista.juegos[i].id_juego+'" />'+
+                           '</form>')
+
+                        $('#juegos').append(form);
+                    }
+                }
             }
         </script>
         <header>
@@ -92,14 +126,6 @@
                 <?= crear() ?>
                 <?= tutorial() ?>
             </div>
-            <form role="form" id="buscar">
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Buscar...">
-                    <span class="input-group-btn">
-                        <button class="btn btn-primary" type="button">Buscar</button>
-                    </span>
-                </div>
-            </form>
             <?= $contents ?>
         </div>
         <footer>
@@ -110,8 +136,5 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
                 integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
                 crossorigin="anonymous"></script>
-        <script>
-            $(".creador").on("click", function() { document.forms[1].submit() });
-        </script>
     </body>
 </html>

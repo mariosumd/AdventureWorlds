@@ -86,3 +86,10 @@ create view v_fichas_formateadas as
     from fichas f
     left join fichas u on f.id_siguiente1 = u.id_ficha
     left join fichas d on f.id_siguiente2 = d.id_ficha;
+
+create view v_juegos_finalizados as
+    select j.nombre as nombre_juego, u.nombre as nombre_usuario,
+           j.finalizado, j.id_juego
+    from juegos j
+    left join usuarios u on j.id_usuario = u.id_usuario
+    where finalizado = true

@@ -4,8 +4,18 @@ class Portal extends CI_Controller {
 
     public function index()
     {
-        $this->portal_template->load('portal/index',
-            array('id_usuario' => $this->session->userdata('usuario')['id']));
+        $data['lista'] = $this->General->lista_juegos();
+        $data['id_usuario'] = $this->session->userdata('usuario')['id'];
+
+        $this->portal_template->load('portal/index', $data);
+
+    }
+
+    public function buscar() {
+        $busqueda = $this->input->post('busqueda');
+
+        $res = $this->General->buscar($busqueda);
+        echo json_encode($res);
     }
 
     public function sobre() {
