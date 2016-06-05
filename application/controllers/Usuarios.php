@@ -100,80 +100,9 @@ class Usuarios extends CI_Controller {
         redirect('usuarios/login');
     }
 
-    public function __construct() {
-        parent::__construct();
-
-        $accion = $this->uri->rsegment(2);
-
-        if ( ! in_array($accion, array('login', 'recordar', 'regenerar', 'registrar', 'validar')) &&
-             ! $this->Usuario->logueado()) {
-            redirect('usuarios/login');
-        }
-
-        if ( ! in_array($accion, array('login', 'logout', 'recordar', 'regenerar', 'registrar',
-                                       'validar', 'perfil', 'foto'))) {
-            if ( ! $this->Usuario->es_admin())
-            {
-                $mensajes[] = array('error' =>
-                    "No tiene permisos para acceder a esta parte de la aplicación");
-                $this->flashdata->load($mensajes);
-
-                redirect('portal/index');
-            }
-        }
-    }
-
     public function index() {
         $data['filas'] = $this->Usuario->todos();
         $this->portal_template->load('usuarios/index', $data);
-    }
-
-    public function perfil($id = NULL) {
-        if($id === NULL) {
-            $mensajes[] = array('error' =>
-                    "Parámetros incorrectos para acceder a su perfil de usuario, por favor, intentelo de nuevo.");
-            $this->flashdata->load($mensajes);
-            redirect('usuarios/login');
-        }
-        $usuario = $this->Usuario->por_id($id);
-        $this->portal_template->load('usuarios/perfil', $usuario);
-    }
-
-    public function foto($id = NULL) {
-        if($id === NULL) {
-            $mensajes[] = array('error' =>
-                    "Parámetros incorrectos para acceder a subida de foto de perfil, por favor, intentelo de nuevo.");
-            $this->flashdata->load($mensajes);
-            redirect('usuarios/login');
-        }
-        $data['id'] = $id;
-        $data['error'] = array();
-
-        if ($this->input->post('insertar') !== NULL) {
-            $config['upload_path'] = 'images/usuarios/';
-            $config['allowed_types'] = 'jpeg|jpg|jpe';
-            $config['overwrite'] = TRUE;
-            $config['max_width'] = '250';
-            $config['max_height'] = '250';
-            $config['max_size'] = '100';
-            $config['file_name'] = $id . '.jpeg';
-
-            $this->load->library('upload', $config);
-
-            if ( ! $this->upload->do_upload('foto')) {
-                $data['error'] = $this->upload->display_errors();
-            }
-            else {
-                $data = array('upload_data' => $this->upload->data());
-
-                $imagen = new Imagick($data['upload_data']['full_path']);
-                $imagen->adaptiveResizeImage(70, 70);
-                $imagen->writeImageFile(fopen("images/usuarios/" . $id . "_thumbnail.jpeg", "w"));
-
-                redirect('usuarios/perfil/' . $id);
-            }
-        }
-        $this->portal_template->load('usuarios/foto', $data);
     }
 
     public function validar($usuario_id = NULL, $token = NULL) {
@@ -204,11 +133,12 @@ class Usuarios extends CI_Controller {
         $this->Token->borrar($usuario_id);
 
         $mensajes[] = array('info' =>
-            "Cuenta validada. Ya puede logear en el sistema.");
+            "Cuenta validada. ¡Ya puedes iniciar sesión!");
         $this->flashdata->load($mensajes);
 
         redirect('/usuarios/login');
     }
+
     public function registrar() {
 
         if ($this->input->post('registrar') !== NULL)
@@ -277,7 +207,7 @@ class Usuarios extends CI_Controller {
                 }
                 else {
                     $mensajes[] = array('info' =>
-                            "Confirme su cuenta a traves de su correo electrónico.");
+                            "Confirma tu cuenta a traves de tu correo electrónico.");
                     $this->flashdata->load($mensajes);
 
                     redirect('usuarios/login');
@@ -388,94 +318,22 @@ class Usuarios extends CI_Controller {
         $this->portal_template->load('usuarios/regenerar', $data);
     }
 
-    public function insertar()
-    {
-        if ($this->input->post('insertar') !== NULL)
-        {
-            $reglas = $this->reglas_comunes;
-            $reglas[0]['rules'] .= '|is_unique[usuarios.nombre]';
-            $this->form_validation->set_rules($reglas);
-            if ($this->form_validation->run() !== FALSE)
-            {
-                $valores = $this->limpiar('insertar', $this->input->post());
-                $valores['registro_verificado'] = TRUE;
-                $this->Usuario->insertar($valores);
-                redirect('usuarios/index');
-            }
-        }
-        $data['roles'] = $this->Rol->lista();
-        $this->portal_template->load('usuarios/insertar', $data);
-    }
+    public function validar_login() {
+        $nombre = $this->input->post('nombre');
+        $passwd = $this->input->post('passwd');
 
-    public function editar($id = NULL)
-    {
-        if ($id === NULL)
-        {
-            redirect('usuarios/index');
+        if ($nombre !== '' && $this->Usuario->existe_nombre($nombre)) {
+            $id   = $this->Usuario->por_nombre($nombre)['id_usuario'];
+            $pass = $this->Usuario->password($id)['password'];
+            if (password_verify($passwd, $pass) === TRUE) {
+                echo 'TRUE';
+            } else {
+                echo 'FALSE';
+            }
+        } else {
+            echo 'FALSE';
         }
 
-        $id = trim($id);
-
-        if ($this->input->post('editar') !== NULL)
-        {
-            $reglas = $this->reglas_comunes;
-            $reglas[0]['rules'] .= "|callback__nombre_unico[$id]";
-            $reglas[] = $this->array_password_anterior;
-            $reglas[sizeof($reglas)-1]['rules'] .= "|callback__password_anterior_correcto[$id]";
-            $this->form_validation->set_rules($reglas);
-            if ($this->form_validation->run() !== FALSE)
-            {
-                $valores = $this->limpiar('editar', $this->input->post());
-                unset($valores['password_anterior']);
-                $this->Usuario->editar($valores, $id);
-                redirect('usuarios/index');
-            }
-        }
-        $valores = $this->Usuario->por_id($id);
-        if ($valores === FALSE)
-        {
-            redirect('usuarios/index');
-        }
-        $data = $valores;
-        if (isset($data['password']))
-        {
-            unset($data['password']);
-        }
-        $data['roles'] = $this->Rol->lista();
-        $this->portal_template->load('usuarios/editar', $data);
-    }
-
-    public function borrar($id = NULL)
-    {
-        if ($this->input->post('borrar') !== NULL)
-        {
-            $id = $this->input->post('id');
-            if ($id !== NULL)
-            {
-                $this->Usuario->borrar($id);
-            }
-            redirect('usuarios/index');
-        }
-        else
-        {
-            if ($id === NULL)
-            {
-                redirect('usuarios/index');
-            }
-            else
-            {
-                $res = $this->Usuario->por_id($id);
-                if ($res === FALSE)
-                {
-                    redirect('usuarios/index');
-                }
-                else
-                {
-                    $data = $res;
-                    $this->portal_template->load('usuarios/borrar', $data);
-                }
-            }
-        }
     }
 
     public function _password_valido($password, $nombre) {

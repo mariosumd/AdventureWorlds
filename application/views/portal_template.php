@@ -61,7 +61,7 @@
                 $('#logout').on("click", delCookie);
                 $('.creador').on("click", function() { $(this).parent().submit() });
                 $('#juegos form').on("click", function() {$(this).submit() });
-                $('#buscar').on('submit', buscar)
+                $('#buscar').on('submit', buscar);
                 cookie();
             });
 

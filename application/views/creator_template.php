@@ -82,6 +82,7 @@
                 $('.img > span').on('click', imagen);
                 $('.borrar-juego > span').on('click', confirmar);
                 $('.final-juego > span').on('click', confirmar);
+                $('.mapa span').on('click', mapa);
                 $('#form-img').on('submit', subirImagen);
                 $('.footer-img > button').on('click', cancelaImagen);
                 $('.botones button:not(.siguiente)').on('click', contenidoBoton);
@@ -203,6 +204,7 @@
                     },
                     success: function() {
                         cancelaConfirm();
+                        $(window).off('beforeunload');
                         window.location.replace("<?= base_url('portal/index') ?>");
                     }
                 });
@@ -627,7 +629,8 @@
 
             function textarea() {
                 $(this).fadeOut();
-                $('textarea').val($(this).text());
+                var val = $(this).html();
+                $('textarea').val(val.replace(/<br>/g, '\n'));
                 $('.ocultoText')
                 .css({
                     padding: "10px",
@@ -639,6 +642,7 @@
 
             function contenido() {
                 var contenido = $('textarea').val();
+                contenido = contenido.replace(/\r?\n/g, '<br />');
 
                 if (contenido.length > 500) {
                     $('.ocultoText span').css({color: '#a94446'});
@@ -659,7 +663,7 @@
                 });
 
                 $('.ocultoText').fadeOut();
-                $('#ficha > p').text(contenido).fadeIn();
+                $('#ficha > p').html(contenido).fadeIn();
             }
 
             function cancelaContenido() {
@@ -809,7 +813,7 @@
 
                     var contenido = res.contenido === null || res.contenido === "" ?
                         "Clica aquí para cambiar el contenido" : res.contenido;
-                    $("#ficha p").text(contenido);
+                    $("#ficha p").html(contenido);
                     var titulo = res.titulo === null ? '' : res.titulo;
                     $(".titulo").text(titulo);
                     var cont_boton1 = res.cont_boton1 === null ?
@@ -926,6 +930,10 @@
                 e.preventDefault();
                 $('#modalImagen').modal('hide');
             }
+
+            function mapa() {
+                window.open("<?= base_url('creadores/mapa') ?>/"+id_juego);
+            }
         </script>
 
         <header>
@@ -986,6 +994,7 @@
                     <ul>
                         <li class="final-juego"><span value="finalizar el juego">Finalizar</span></li>
                         <li class="borrar-juego"><span value="borrar el juego">Borrar</span></li>
+                        <li class="mapa"><span>Descargar mapa</span></li>
                     </ul>
                 </div>
                 <div class="group unlock">

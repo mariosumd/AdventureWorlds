@@ -134,4 +134,11 @@ class Creador extends CI_Model{
         $this->db->query('update juegos set finalizado = true where id_juego = ?',
                             array($id_juego));
     }
+
+    public function nombre_juego($id_juego) {
+        $res = $this->db->query('select nombre from juegos where id_juego = ?',
+                            array($id_juego));
+
+        return $res->row_array()['nombre'];
+    }
 }

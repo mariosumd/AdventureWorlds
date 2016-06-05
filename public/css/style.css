@@ -259,3 +259,8 @@ footer > a:last-child {
 #juegos p > span {
     font-weight: bold;
 }
+
+#login > span {
+    display: none;
+    color: sienna;
+}

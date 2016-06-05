@@ -119,7 +119,7 @@
 
                     var contenido = res.contenido === null || res.contenido === "" ?
                         "" : res.contenido;
-                    $("#ficha p").text(contenido);
+                    $("#ficha p").html(contenido);
                     var titulo = res.titulo === null ? '' : res.titulo;
                     $(".titulo").text(titulo);
                     var cont_boton1 = res.cont_boton1 === null ?
