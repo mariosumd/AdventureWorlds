@@ -26,7 +26,7 @@ header {
     flex-direction: row;
     justify-content: space-between;
     width: 100%;
-    height: 7em;
+    height: 8em;
     background-color: black;
     color: white;
 }
@@ -42,9 +42,17 @@ header > h3 {
     width: 20%;
 }
 
+header > a {
+    width: 15%;
+}
+
+header > form {
+    width: 15%;
+}
+
 .logo {
-    height: 100%;
-    width: 50%;
+    height: 110px;
+    width: 110px;
     background-color: #D8D8D8;
 }
 
@@ -70,7 +78,7 @@ header > h3 {
 }
 
 nav {
-    width: 60%;
+    width: 100%;
     display: flex !important;
     flex-direction: row;
     justify-content: space-around;
@@ -135,10 +143,13 @@ header li:hover {
 }
 
 header li:hover ul {
-    display: block;
+    display: flex;
+    flex-direction: column;
     background-color: #696969;
     position: absolute;
     margin-right: 27px;
+    width: 90px;
+    z-index: 10;
 }
 
 header li:hover ul li:hover {
@@ -158,6 +169,7 @@ aside {
     width: 15%;
     height: 100%;
     border-right: 1px solid black;
+    border-left: 1px solid black;
     overflow-y: auto;
     overflow-x: auto;
 }
@@ -272,4 +284,122 @@ aside ul li:before {
     height: 150px;
     width: 110px;
     margin-left: 10px;
+}
+
+.responsive {
+    display: none;
+}
+
+.incompatible {
+    display: none;
+}
+
+@media screen and (max-width: 1000px) {
+    #contenido {
+        flex-direction: row-reverse;
+    }
+
+    .responsive {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        background-color: black;
+        color: white;
+        width: 15% !important;
+        height: 100%;
+    }
+
+    .responsive > a {
+        height: 15%;
+        width: 100%;
+    }
+
+    .responsive > nav {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .responsive li > a {
+        color: white;
+        text-decoration: none;
+    }
+
+    .responsive li > a:hover {
+        color: white;
+        text-decoration: none;
+    }
+
+    .responsive ul {
+        padding: 0.5em;
+        margin: 0;
+    }
+
+    .responsive li {
+        display: block;
+        float: left;
+        position: relative;
+        padding: 0.5em;
+    }
+
+    .responsive ul ul {
+        position: absolute;
+        display: none;
+    }
+
+    .responsive li:hover {
+        background-color: #6A6969;
+    }
+
+    .responsive li:hover ul {
+        display: block;
+        background-color: #696969;
+        position: absolute;
+        margin-right: 27px;
+        z-index: 10;
+    }
+
+    .responsive li:hover ul li:hover {
+        background-color: #8C8C8C;
+    }
+
+    aside {
+        width: 20%;
+    }
+
+    header {
+        display: none !important;
+    }
+
+    .unlock {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    header { display: none; }
+    #contenido {display: none;}
+
+    div.incompatible {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        background-color: rgba(0, 147, 198, 0.5);
+        color: inherit;
+        margin: auto;
+        height: 100%;
+        width: 100%;
+        text-align: center;
+    }
+
+    div.incompatible > img {
+        width: 30%;
+        height: 35%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    div > h3 {
+        margin-left: auto;
+        margin-right: auto;
+    }
 }

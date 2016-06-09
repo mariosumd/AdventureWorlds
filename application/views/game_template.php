@@ -59,6 +59,7 @@
     </head>
     <body>
         <script>
+            var inicio   = <?= $primera_ficha ?>;
             var id_ficha = <?= $id_ficha ?>;
             var id_juego = <?= $id_juego ?>;
             var id_usuario;
@@ -67,8 +68,9 @@
                 $('#logout').on('click', delCookie);
                 $(document).on('beforeunload', confirmaSalida);
                 $('.botones button').on('click', siguienteFicha);
-                cargaFicha(<?= $id_ficha ?>);
+                $('.retry').on('click', reinicia);
                 cookie();
+                cargaFicha(<?= $id_ficha ?>);
             });
 
             function confirmaSalida() {
@@ -96,6 +98,10 @@
                 }).responseText;
             }
 
+            function reinicia() {
+                cargaFicha(inicio);
+            }
+
             function siguienteFicha() {
                 idSiguiente = $(this).val();
 
@@ -104,6 +110,19 @@
             }
 
             function cargaFicha(id) {
+                <?php if (logueado()): ?>
+                    $.ajax({
+                        url: "<?= base_url('juegos/guardar_juego') ?>",
+                        method: 'POST',
+                        data: {
+                            'id_juego': id_juego,
+                            'id_usuario': id_usuario,
+                            'id_ficha': id
+                        }
+
+                    });
+                <?php endif; ?>
+
                  var res = $.ajax({
                     async: false,
                     url: "<?= base_url('creadores/cargar_ficha') ?>",
@@ -136,6 +155,7 @@
 
                     if (res.final === "t") {
                         $('.botones').fadeOut();
+                        $('.retry').fadeIn();
                     } else if (res.botones === "t") {
                         $('.botones button:last-child').fadeOut();
                     } else {
@@ -211,6 +231,7 @@
                         <button class="btn btn-lg" value="1"></button>
                         <button class="btn btn-lg" value="2"></button>
                     </div>
+                    <button class="retry btn btn-danger">Volver a jugar</button>
                     <?= $contents ?>
                 </div>
             </div>

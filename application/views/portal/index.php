@@ -11,11 +11,10 @@
 <div id="juegos">
 <?php if ($lista !== FALSE): ?>
     <?php foreach($lista as $juego): ?>
-        <form method="post" action="<?= base_url('juegos/index') ?>">
+        <a href="<?= base_url('juegos/jugar').'/'.$juego['id_juego'] ?>">
             <h5><?= $juego['nombre_juego'] ?></h5>
             <p>Creado por <span><?= $juego['nombre_usuario'] ?></span></p>
-            <?= form_hidden('id_juego', $juego['id_juego']); ?>
-        </form>
+        </a>
     <?php endforeach; ?>
 <?php else: ?>
     <h3>No se encontraron juegos...</h3>

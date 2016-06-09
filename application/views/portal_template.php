@@ -1,28 +1,4 @@
 <!DOCTYPE html>
-<!--
-	                 λλλλλ
-	            λλλλλλλλλλλλλλλ
-	         λλλλλλλλλ  λλλλλλλλλλ
-	        λλλλλλ            λλλλλλ
-	      λλλλλ                  λλλλ
-	     λλλλ      λλλλλλ         λλλλ
-	    λλλλ         λλλλλ         λλλλ
-	   λλλλ           λλλλ          λλλλ
-	   λλλλ           λλλλλ          λλλλ
-	  λλλλ           λλλλλλ          λλλλ
-	  λλλλ          λλλλλλλ          λλλλ
-	  λλλλ         λλλλ λλλλ         λλλλ
-	   λλλ        λλλλλ  λλλλ        λλλλ
-	   λλλλ      λλλλλ    λλλλ       λλλλ
-	   λλλλ     λλλλ      λλλλλλλ   λλλλ
-	    λλλλ   λλλλλ       λλλλλλλ λλλλ
-	     λλλλ                     λλλλ
-	      λλλλλ                  λλλλ
-	       λλλλλλ             λλλλλλ
-	         λλλλλλλλλ    λλλλλλλλ
-	            λλλλλλλλλλλλλλλλ
-	                λλλλλλλλ
-	-->
 <html>
     <head>
         <meta charset="utf-8">
@@ -60,7 +36,6 @@
             $(document).ready(function() {
                 $('#logout').on("click", delCookie);
                 $('.creador').on("click", function() { $(this).parent().submit() });
-                $('#juegos form').on("click", function() {$(this).submit() });
                 $('#buscar').on('submit', buscar);
                 cookie();
             });
@@ -112,6 +87,9 @@
             <?= anchor('/portal/index', img(array('src' => 'images/logo.png',
                                                   'alt' => 'logo',
                                                   'class' => 'logo'))) ?>
+            <?= anchor('/portal/index', img(array('src' => 'images/logo_letras.png',
+                                                  'alt' => 'logo',
+                                                  'class' => 'logoletras'))) ?>
             <a href="/portal/index">
                 <div>
                     <h1>ADVENTURE WORLDS</h1>

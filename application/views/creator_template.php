@@ -23,7 +23,7 @@
 	            λλλλλλλλλλλλλλλλ
 	                λλλλλλλλ
 	-->
-<html>
+<html lang="es">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -1045,7 +1045,10 @@
                     <div class="modal-body">
                         <div class="errores"></div>
                         <form role="form" id="form-img">
-                            <input type="file" accept="image/*" name="imagen" id="imagen" />
+                            <div class="form-group">
+                                <label for="imagen">Imagen</label>
+                                <input type="file" accept="image/*" name="imagen" id="imagen" />
+                            </div>
                             <button class="btn btn-success">Subir</button>
                         </form>
                     </div>
@@ -1160,14 +1163,17 @@
                 </div>
             </div>
         </div>
-
+        <div class="incompatible">
+            <img src="<?= base_url() ?>images/logo_letras.png" alt="logo" />
+            <h3>La resolución actual de su dispositivo es incompatible con el editor.</h3>
+        </div>
         <div id="contenido">
             <?= mensajes() ?>
             <aside><h4>Fichas</h4></aside>
             <div>
                 <div class="ventana">
                     <a href="<?= base_url('portal/index') ?>">
-                        <img src="<?= base_url() ?>images/logo_letras.png" />
+                        <img src="<?= base_url() ?>images/logo_letras.png" alt="logo" />
                     </a>
                     <h4></h4>
                     <?= login() ?>
@@ -1206,6 +1212,75 @@
                     </div>
                     <?= $contents ?>
                 </div>
+            </div>
+            <div class="responsive">
+                <?= anchor('/portal/index', img(array('src' => 'images/logo.png',
+                                                      'alt' => 'logo',
+                                                      'class' => 'logo'))) ?>
+                <h3></h3>
+                <nav>
+                    <div class="group">
+                        <h4>Fondo</h4>
+                        <ul>
+                            <li>
+                                <span>Color</span>
+                                <ul class="colFon">
+                                    <li><span value="#4B698B">Azul</span></li>
+                                    <li><span value="#D4D26A">Amarillo</span></li>
+                                    <li><span value="#FFFFFF">Blanco</span></li>
+                                    <li><span value="#000000">Negro</span></li>
+                                    <li><span value="#D46A6A">Rojo</span></li>
+                                    <li><span value="#55AA55">Verde</span></li>
+                                </ul>
+                            </li>
+                            <li class="img"><span>Imagen<span></li>
+                        </ul>
+                    </div>
+                    <div class="group">
+                        <h4>Botones</h4>
+                        <ul>
+                            <li>
+                                <span>Número</span>
+                                <ul class="numBot">
+                                    <li><span value="true">1</span></li>
+                                    <li><span value="false">2</span></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <span>Color</span>
+                                <ul class="colBot">
+                                    <li><span value="#4B698B">Azul</span></li>
+                                    <li><span value="#D4D26A">Amarillo</span></li>
+                                    <li><span value="#FFFFFF">Blanco</span></li>
+                                    <li><span value="#000000">Negro</span></li>
+                                    <li><span value="#D46A6A">Rojo</span></li>
+                                    <li><span value="#55AA55">Verde</span></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="group">
+                        <h4>Ficha</h4>
+                        <ul>
+                            <li class="final"><span value="f">Final</span></li>
+                            <li class="borrar"><span value="borrar la ficha">Borrar</span></li>
+                        </ul>
+                    </div>
+                    <div class="group">
+                        <h4>Juego</h4>
+                        <ul>
+                            <li class="final-juego"><span value="finalizar el juego">Finalizar</span></li>
+                            <li class="borrar-juego"><span value="borrar el juego">Borrar</span></li>
+                            <li class="mapa"><span>Descargar mapa</span></li>
+                        </ul>
+                    </div>
+                    <div class="group unlock">
+                        <img src="<?= base_url() ?>images/unlock.png"
+                            title="Abrir barra de edición en otra ventana"
+                            alt="Abrir barra de edición en otra ventana" />
+                    </div>
+                </nav>
+                <?= login() ?>
             </div>
         </div>
         <!-- Latest compiled and minified JavaScript -->

@@ -103,3 +103,7 @@ header > h3 {
 .botones > button {
     margin: 5px;
 }
+
+button.retry {
+    display: none;
+}

@@ -19,8 +19,9 @@ body {
   background: -o-linear-gradient(#000, #D8D8D8);
   background: -moz-linear-gradient(#000, #D8D8D8);
   background-repeat: no-repeat;
+  background-attachment: fixed;
   background-position: center;
-  background-size: cover !important;
+  background-size: auto;
   color: inherit;
 }
 
@@ -29,7 +30,7 @@ header {
     width: 90%;
     display: flex !important;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: center;
     background-color: #D8D8D8;
     color: inherit;
     margin-left: auto;
@@ -54,6 +55,12 @@ header h1, header h2 {
     text-shadow: 2px 2px #000000;
 }
 
+header > a:nth-of-type(3):hover {
+    transform: scale(1.1,1.1);
+    -webkit-transform: scale(1.1,1.1);
+    -ms-transform: scale(1.1,1.1);
+}
+
 #contenido h3, #contenido h4 {
     font-family: 'Candal';
     background-color: inherit;
@@ -62,6 +69,18 @@ header h1, header h2 {
 }
 
 .logo {
+    height: 100%;
+    width: 70%;
+    -webkit-transition: width 2s;
+    transition: 1s;
+}
+
+.logo:hover {
+    transform: rotateY(180deg);
+}
+
+.logoletras {
+    display: none;
     height: 100%;
     width: 70%;
 }
@@ -222,23 +241,25 @@ footer > a:last-child {
     flex-direction: column;
 }
 
-#juegos > form {
+#juegos > a {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     border: 1px solid black;
-    background-color: #0093c6;
     background-color: rgba(0, 147, 198, 0.5);
+    color: black;
     width: 60%;
     margin-top: 20px;
     margin-right: auto;
     margin-left: auto;
     cursor: pointer;
+    text-decoration: none;
 }
 
-#juegos > form:hover {
+#juegos > a:hover {
     color: white;
     background-color: rgba(0, 147, 198, 1);
+    text-decoration: none;
 }
 
 #juegos h5 {
@@ -263,4 +284,86 @@ footer > a:last-child {
 #login > span {
     display: none;
     color: sienna;
+}
+
+@media screen and (max-width: 1000px) {
+    header > a > div {
+        display: none;
+    }
+
+    .logo {
+        display: none;
+    }
+
+    .logoletras {
+        display: block;
+        height: 100%;
+        width: 70%;
+    }
+
+    .div-buttons {
+        width: 100%;
+        justify-content: space-around;
+    }
+
+    .div-buttons div {
+        margin: 0;
+        padding: 1em;
+    }
+
+    h3 {
+        font-size: 20px !important;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    header > a > div {
+        display: none;
+    }
+
+    header {
+        flex-direction: column;
+    }
+
+    header > * {
+        margin-left: auto !important;
+        margin-right: auto !important;
+        margin-bottom: 20px !important;
+    }
+
+    header > a {
+        text-align: center;
+    }
+
+    .logo {
+        display: none;
+    }
+
+    .logoletras {
+        display: inline;
+        height: 100%;
+        width: 70%;
+        margin: 0;
+    }
+
+    #juegos > form {
+        width: 90%;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    #juegos > form > * {
+        width: 95%;
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    #buscar {
+        width: 90%;
+    }
+
+    .div-buttons {
+        display: none;
+    }
 }

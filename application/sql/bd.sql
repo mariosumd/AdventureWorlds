@@ -62,6 +62,21 @@ create table fichas (
     contenido     varchar(500)
 );
 
+drop table if exists juegos_guardados;
+
+create table juegos_guardados (
+    id_juego   bigint constraint fk_guardados_juegos
+                      references juegos (id_juego)
+                      on delete cascade,
+    id_usuario bigint constraint fk_guardados_usuarios
+                      references usuarios (id_usuario)
+                      on delete cascade,
+    id_ficha   bigint constraint fk_guardados_fichas
+                      references fichas (id_ficha)
+                      on delete cascade,
+    constraint pk_guardados primary key (id_juego, id_usuario)
+);
+
 drop table if exists tokens cascade;
 
 create table tokens (
