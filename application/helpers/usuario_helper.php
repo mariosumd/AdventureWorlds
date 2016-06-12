@@ -50,7 +50,7 @@ function tutorial() {
   $div = "";
 
   if ($CI->Usuario->logueado()):
-      $div .= '<a href="'.base_url('creadores/tutorial').'">';
+      $div .= '<a href="'.base_url('portal/tutorial').'">';
         $div  .= '<div class="creador">';
             $div .= '<h3>¿Cómo creo mi aventura?</h3>';
             $div .= '<h4>Tutorial aquí</h4>';

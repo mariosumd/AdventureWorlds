@@ -61,7 +61,7 @@ header > a:nth-of-type(3):hover {
     -ms-transform: scale(1.1,1.1);
 }
 
-#contenido h3, #contenido h4 {
+#contenido h2, #contenido h3, #contenido h4 {
     font-family: 'Candal';
     background-color: inherit;
     color: #0093c6;
@@ -281,10 +281,29 @@ footer > a:last-child {
     font-weight: bold;
 }
 
+.mas {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 25px;
+    width: 60%;
+}
+
 #login > span {
     display: none;
     color: sienna;
 }
+
+#tutorial {
+    text-align: center;
+}
+
+#tutorial > p {
+    margin: auto !important;
+    margin-top: 20px !important;
+    margin-bottom: 20px !important;
+}
+
+
 
 @media screen and (max-width: 1000px) {
     header > a > div {
@@ -346,17 +365,21 @@ footer > a:last-child {
         margin: 0;
     }
 
-    #juegos > form {
+    #juegos > a {
         width: 90%;
         flex-direction: column;
         text-align: center;
     }
 
-    #juegos > form > * {
+    #juegos > a > * {
         width: 95%;
         text-align: center;
         margin-left: auto;
         margin-right: auto;
+    }
+
+    .mas {
+        width: 90%;
     }
 
     #buscar {

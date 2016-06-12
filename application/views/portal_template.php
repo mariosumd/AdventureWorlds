@@ -36,51 +36,19 @@
             $(document).ready(function() {
                 $('#logout').on("click", delCookie);
                 $('.creador').on("click", function() { $(this).parent().submit() });
-                $('#buscar').on('submit', buscar);
                 cookie();
             });
 
             function cookie() {
                 <?php if (logueado()): ?>
                     if (!$.cookie('usuario')) {
-                        $.cookie('usuario', <?= $id_usuario ?>);
+                        $.cookie('usuario', <?= usuario_id() ?>);
                     }
                 <?php endif; ?>
             }
 
             function delCookie() {
                 $.removeCookie('usuario');
-            }
-
-            function buscar(e) {
-                e.preventDefault()
-                var busqueda = $("#buscar input:text").val();
-
-                var lista = $.ajax({
-                    url: "<?= base_url('portal/buscar') ?>",
-                    method: 'POST',
-                    dataType: 'json',
-                    async: false,
-                    data: {
-                        'busqueda': busqueda
-                    }
-                }).responseJSON;
-
-                if (lista.display === false) {
-                    $('#juegos').html('<h3>No se encontraron juegos...</h3>');
-                } else {
-                    $('#juegos').empty();
-                    for (var i = 0; i < lista.juegos.length; i++) {
-                        var form =
-                        $('<form method="post" action="<?= base_url('juegos/index') ?>">'+
-                              '<h5>'+lista.juegos[i].nombre_juego+'</h5>'+
-                              '<p>Creado por <span>'+lista.juegos[i].nombre_usuario+'</span></p>'+
-                              '<input type="hidden" name="id_juego" value="'+lista.juegos[i].id_juego+'" />'+
-                           '</form>')
-
-                        $('#juegos').append(form);
-                    }
-                }
             }
         </script>
         <header>

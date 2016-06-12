@@ -62,6 +62,10 @@ create table fichas (
     contenido     varchar(500)
 );
 
+insert into fichas (id_ficha, titulo, final, contenido)
+    values (0, 'Sin salida', true,
+                'El creador de este juego te ha dejado sin salida.');
+
 drop table if exists juegos_guardados;
 
 create table juegos_guardados (

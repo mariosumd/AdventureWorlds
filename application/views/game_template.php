@@ -105,8 +105,7 @@
             function siguienteFicha() {
                 idSiguiente = $(this).val();
 
-                if (idSiguiente !== 'none') cargaFicha(idSiguiente);
-                else alert('El creador ha dejado este botón sin salida.');
+                cargaFicha(idSiguiente);
             }
 
             function cargaFicha(id) {
@@ -147,9 +146,9 @@
                     var cont_boton2 = res.cont_boton2 === null ?
                         "": res.cont_boton2;
                     $(".botones button:last-child").text(cont_boton2);
-                    var id_siguiente1 = res.id_siguiente1 === null ? 'none' : res.id_siguiente1;
+                    var id_siguiente1 = res.id_siguiente1 === null ? 0 : res.id_siguiente1;
                     $(".botones button:first-child").attr('value', id_siguiente1);
-                    var id_siguiente2 = res.id_siguiente2 === null ? 'none' : res.id_siguiente2;
+                    var id_siguiente2 = res.id_siguiente2 === null ? 0 : res.id_siguiente2;
                     $(".botones button:last-child").attr('value', id_siguiente2);
                     id_ficha = id;
 

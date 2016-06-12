@@ -3,19 +3,27 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Juegos extends CI_Controller{
 
+    function index() {
+        redirect('portal/index');
+    }
+
     function jugar($id_juego)
     {
-        $id_usuario = $this->session->userdata('usuario')['id'];
-        $data['id_juego'] = $id_juego;
-        $data['nombre_juego'] = $this->Juego->nombre_juego($data['id_juego']);
-        $data['primera_ficha'] = $this->Juego->primera_ficha($id_juego);
-        $data['id_ficha'] = $this->Juego->ficha($data['id_juego'], $id_usuario);
-        $this->session->set_userdata('juego', array(
-                                                    'id'     => $data['id_juego'],
-                                                    'nombre' => $data['nombre_juego']
-                                                ));
+        if ($this->Juego->existe_juego($id_juego)) {
+            $id_usuario = $this->session->userdata('usuario')['id'];
+            $data['id_juego'] = $id_juego;
+            $data['nombre_juego'] = $this->Juego->nombre_juego($data['id_juego']);
+            $data['primera_ficha'] = $this->Juego->primera_ficha($id_juego);
+            $data['id_ficha'] = $this->Juego->ficha($data['id_juego'], $id_usuario);
+            $this->session->set_userdata('juego', array(
+                                                        'id'     => $data['id_juego'],
+                                                        'nombre' => $data['nombre_juego']
+                                                    ));
 
-        $this->game_template->load('juegos/jugar', $data);
+            $this->game_template->load('juegos/jugar', $data);
+        } else {
+            redirect('portal/index');
+        }
     }
 
     function guardar_juego() {

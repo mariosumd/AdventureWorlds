@@ -160,7 +160,7 @@ header li:hover ul li:hover {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-    height: 90%;
+    height: 100%;
 }
 
 aside {
@@ -302,11 +302,12 @@ aside ul li:before {
     .responsive {
         display: flex;
         flex-direction: column;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
         background-color: black;
         color: white;
-        width: 15% !important;
+        width: 11% !important;
         height: 100%;
+        position: absolute;
     }
 
     .responsive > a {
@@ -317,6 +318,7 @@ aside ul li:before {
     .responsive > nav {
         display: flex;
         flex-direction: column;
+        margin-right: 20px;
     }
 
     .responsive li > a {
@@ -372,6 +374,10 @@ aside ul li:before {
 
     .unlock {
         display: none;
+    }
+
+    .responsive .user {
+        flex-direction: column;
     }
 }
 

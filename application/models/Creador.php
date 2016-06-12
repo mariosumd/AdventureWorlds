@@ -126,6 +126,12 @@ class Creador extends CI_Model{
                            where id_ficha = ?', array($id_ficha));
     }
 
+    public function eliminar_imagen($id_ficha) {
+        $this->db->query('update fichas
+                             set imagen = false
+                           where id_ficha = ?', array($id_ficha));
+    }
+
     public function borrar_ficha($id_ficha) {
         $this->db->query('delete from fichas where id_ficha = ?', array($id_ficha));
     }

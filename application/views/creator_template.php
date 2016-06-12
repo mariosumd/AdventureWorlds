@@ -84,6 +84,7 @@
                 $('.final-juego > span').on('click', confirmar);
                 $('.mapa span').on('click', mapa);
                 $('#form-img').on('submit', subirImagen);
+                $('#form-img button:last-of-type').on('click', eliminaImagen);
                 $('.footer-img > button').on('click', cancelaImagen);
                 $('.botones button:not(.siguiente)').on('click', contenidoBoton);
                 $('h4.titulo').on('click', text);
@@ -926,6 +927,16 @@
                 });
             }
 
+            function eliminaImagen(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: "<?= base_url('creadores/eliminar_imagen') ?>",
+                    type: 'post'
+                });
+                $('#ficha').css({backgroundImage: ''});
+                $('#modalImagen').modal('hide');
+            }
+
             function cancelaImagen(e) {
                 e.preventDefault();
                 $('#modalImagen').modal('hide');
@@ -1007,7 +1018,7 @@
         </header>
         <!-- Modal -->
         <div class="modal fade" id="modalConfirm" tabindex="-1" role="dialog"
-            aria-labelledby="imagen" aria-hidden="true" data-backdrop="static"
+            aria-labelledby="confirm" aria-hidden="true" data-backdrop="static"
             data-keyboard="false">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -1050,6 +1061,7 @@
                                 <input type="file" accept="image/*" name="imagen" id="imagen" />
                             </div>
                             <button class="btn btn-success">Subir</button>
+                            <button class="btn btn-danger">Eliminar</button>
                         </form>
                     </div>
                     <div class="modal-footer footer-img">

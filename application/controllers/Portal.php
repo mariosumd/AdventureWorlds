@@ -4,17 +4,23 @@ class Portal extends CI_Controller {
 
     public function index()
     {
-        $data['lista'] = $this->General->lista_juegos();
-        $data['id_usuario'] = $this->session->userdata('usuario')['id'];
+        $res = $this->General->buscar('', 0);
+        $data['lista'] = $res['juegos'];
+        $data['total_scroll'] = $res['total_scroll'];
 
         $this->portal_template->load('portal/index', $data);
 
     }
 
+    public function tutorial() {
+        $this->portal_template->load('portal/tutorial');
+    }
+
     public function buscar() {
         $busqueda = $this->input->post('busqueda');
+        $offset   = $this->input->post('offset');
 
-        $res = $this->General->buscar($busqueda);
+        $res = $this->General->buscar($busqueda, $offset);
         echo json_encode($res);
     }
 

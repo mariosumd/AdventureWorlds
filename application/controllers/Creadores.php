@@ -214,6 +214,13 @@ class Creadores extends CI_Controller {
         }
     }
 
+    public function eliminar_imagen() {
+        $id_ficha = $this->session->userdata('ficha')['actual'];
+        $this->Creador->eliminar_imagen($id_ficha);
+
+        unlink('./images/juegos/'.$id_ficha.'.jpg');
+    }
+
     public function borrar_ficha() {
         $id_ficha = $this->input->post('id_ficha');
         $this->Creador->borrar_ficha($id_ficha);
