@@ -1,4 +1,4 @@
-<?php portal_template_set('title', 'Inicio') ?>
+<?php portal_template_set('title', 'Portal') ?>
 
 <script>
     var busqueda = '';
@@ -33,7 +33,7 @@
             $('#juegos > *').not('.mas').remove();
             for (var i = 0; i < lista.juegos.length; i++) {
                 var juego =
-                $('<a href="<?= base_url('juegos/index') ?>/'+lista.juegos[i].id_juego+'">'+
+                $('<a href="<?= base_url('juegos/jugar') ?>/'+lista.juegos[i].id_juego+'">'+
                       '<h5>'+lista.juegos[i].nombre_juego+'</h5>'+
                       '<p>Creado por <span>'+lista.juegos[i].nombre_usuario+'</span></p>'+
                    '</a>')
@@ -61,7 +61,7 @@
 
         for (var i = 0; i < lista.juegos.length; i++) {
             var juego =
-            $('<a href="<?= base_url('juegos/index') ?>/'+lista.juegos[i].id_juego+'">'+
+            $('<a href="<?= base_url('juegos/jugar') ?>/'+lista.juegos[i].id_juego+'">'+
                   '<h5>'+lista.juegos[i].nombre_juego+'</h5>'+
                   '<p>Creado por <span>'+lista.juegos[i].nombre_usuario+'</span></p>'+
                '</a>')

@@ -9,7 +9,7 @@ class Juegos extends CI_Controller{
 
     function jugar($id_juego)
     {
-        if ($this->Juego->existe_juego($id_juego)) {
+        if (preg_match('/^\d+$/', $id_juego) && $this->Juego->existe_juego($id_juego)) {
             $id_usuario = $this->session->userdata('usuario')['id'];
             $data['id_juego'] = $id_juego;
             $data['nombre_juego'] = $this->Juego->nombre_juego($data['id_juego']);

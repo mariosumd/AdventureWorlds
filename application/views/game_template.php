@@ -99,6 +99,7 @@
             }
 
             function reinicia() {
+                document.getElementById('audio').play();
                 cargaFicha(inicio);
             }
 
@@ -219,7 +220,10 @@
             <h3><?= $nombre_juego ?></h3>
             <?= login() ?>
         </header>
-
+        <audio id="audio">
+            <source src="<?= base_url() ?>audio/final.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
         <div id="contenido">
             <?= mensajes() ?>
             <div>
