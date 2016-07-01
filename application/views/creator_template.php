@@ -947,6 +947,16 @@
             }
         </script>
 
+	<script>
+  	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  		})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  		ga('create', 'UA-79820500-1', 'auto');
+  		ga('send', 'pageview');
+	</script>
+
         <header>
             <?= anchor('/portal/index', img(array('src' => 'images/logo.png',
                                                   'alt' => 'logo',
@@ -1004,8 +1014,8 @@
                     <h4>Juego</h4>
                     <ul>
                         <li class="final-juego"><span value="finalizar el juego">Finalizar</span></li>
-                        <li class="borrar-juego"><span value="borrar el juego">Borrar</span></li>
-                        <li class="mapa"><span>Descargar mapa</span></li>
+			<li class="borrar-juego"><span value="borrar el juego">Borrar</span></li>
+			<!-- <li class="mapa"><span>Descargar mapa</span></li> -->
                     </ul>
                 </div>
                 <div class="group unlock">
