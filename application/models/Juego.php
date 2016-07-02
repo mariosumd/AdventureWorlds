@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Juego extends CI_Model{
     public function existe_juego($id_juego) {
-        $res = $this->db->query('select * from juegos where id_juego = ?',
+        $res = $this->db->query('select * from v_juegos_finalizados where id_juego = ?',
                             array($id_juego));
 
         return $res->num_rows() === 1;

@@ -411,6 +411,11 @@
                     $(div).find('span').css({color: '#a94446'});
                     $(div).addClass('has-error');
                     return;
+                }
+                else if (nombre_juego === "" || nombre_juego === null) {
+                    $(div).find('span').css({color: '#a94446'});
+                    $(div).addClass('has-error');
+                    return;
                 } else {
                     $(div).find('span').css({color: 'inherit'});
                     $(div).removeClass('has-error');
@@ -1099,7 +1104,7 @@
                             <div class="form-group">
                                 <label for="nombre-juego">Nombre del nuevo juego</label>
                                 <br />
-                                <span>Máximo 50 caracteres</span>
+                                <span>Debe tener nombre. Máximo 50 caracteres</span>
                                 <input type="text" class="form-control"
                                     id="nombre-juego" pattern="^.+$" />
                             </div>
