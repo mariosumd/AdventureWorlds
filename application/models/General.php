@@ -20,26 +20,24 @@ class General extends CI_Model{
                                       array($busqueda));
         }
 
-        return ceil($res->num_rows()/5);
+        return ceil($res->num_rows()/2);
     }
 
     function buscar($busqueda, $offset) {
-        $offset = $offset * 5;
+        $offset = $offset * 2;
 
         if ($busqueda === '') {
             $res = $this->db->query("select *
                                        from v_juegos_finalizados
                                       where true
-				   order by id_juego desc
-                                      limit 5 offset ?",
+                                      limit 2 offset ?",
                                       array($offset));
         }
         else {
             $res = $this->db->query("select *
                                        from v_juegos_finalizados
                                       where upper(nombre_juego) like upper(concat('%', ?, '%'))
-                                   order by id_juego desc
-				      limit 5 offset ?",
+                                      limit 2 offset ?",
                                       array($busqueda, $offset));
         }
 

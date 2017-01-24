@@ -5,14 +5,8 @@ class Portal extends CI_Controller {
     public function index()
     {
         $res = $this->General->buscar('', 0);
-        if ($res['display'] === FALSE) {
-            $data['total_scroll'] = 0;
-	    $data['lista'] = FALSE;
-        }
-	else {
-             $data['lista'] = $res['juegos'];
-             $data['total_scroll'] = $res['total_scroll'];
-        }
+        $data['lista'] = $res['juegos'];
+        $data['total_scroll'] = $res['total_scroll'];
 
         $this->portal_template->load('portal/index', $data);
 

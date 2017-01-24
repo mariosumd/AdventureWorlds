@@ -1,8 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-// include('libgv-php5/gv.php');
-// include('/usr/share/pear/Image/GraphViz.php');
+include('libgv-php5/gv.php');
+include('/home/mariosumd/pear/share/pear/Image/GraphViz.php');
 
 class Creadores extends CI_Controller {
 
@@ -233,7 +233,7 @@ class Creadores extends CI_Controller {
         $mensajes[] = array('info' => '¡Juego terminado!');
         $this->flashdata->load($mensajes);
     }
-/*
+
     public function mapa($id_juego) {
         //$id_juego = $this->input->post('id_juego');
         $nombre   = $this->Creador->nombre_juego($id_juego);
@@ -250,5 +250,4 @@ class Creadores extends CI_Controller {
         }
         $content = $gv->image('pdf');
     }
-*/
 }

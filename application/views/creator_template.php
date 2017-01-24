@@ -411,11 +411,6 @@
                     $(div).find('span').css({color: '#a94446'});
                     $(div).addClass('has-error');
                     return;
-                }
-                else if (nombre_juego === "" || nombre_juego === null) {
-                    $(div).find('span').css({color: '#a94446'});
-                    $(div).addClass('has-error');
-                    return;
                 } else {
                     $(div).find('span').css({color: 'inherit'});
                     $(div).removeClass('has-error');
@@ -952,16 +947,6 @@
             }
         </script>
 
-	<script>
-  	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  		})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-  		ga('create', 'UA-79820500-1', 'auto');
-  		ga('send', 'pageview');
-	</script>
-
         <header>
             <?= anchor('/portal/index', img(array('src' => 'images/logo.png',
                                                   'alt' => 'logo',
@@ -1019,8 +1004,8 @@
                     <h4>Juego</h4>
                     <ul>
                         <li class="final-juego"><span value="finalizar el juego">Finalizar</span></li>
-			<li class="borrar-juego"><span value="borrar el juego">Borrar</span></li>
-			<!-- <li class="mapa"><span>Descargar mapa</span></li> -->
+                        <li class="borrar-juego"><span value="borrar el juego">Borrar</span></li>
+                        <li class="mapa"><span>Descargar mapa</span></li>
                     </ul>
                 </div>
                 <div class="group unlock">
@@ -1104,7 +1089,7 @@
                             <div class="form-group">
                                 <label for="nombre-juego">Nombre del nuevo juego</label>
                                 <br />
-                                <span>Debe tener nombre. Máximo 50 caracteres</span>
+                                <span>Máximo 50 caracteres</span>
                                 <input type="text" class="form-control"
                                     id="nombre-juego" pattern="^.+$" />
                             </div>
