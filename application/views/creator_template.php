@@ -411,6 +411,11 @@
                     $(div).find('span').css({color: '#a94446'});
                     $(div).addClass('has-error');
                     return;
+                }
+                 else if (nombre_juego === "" || nombre_juego === null) {
+                     $(div).find('span').css({color: '#a94446'});
+                     $(div).addClass('has-error');
+                     return;
                 } else {
                     $(div).find('span').css({color: 'inherit'});
                     $(div).removeClass('has-error');
