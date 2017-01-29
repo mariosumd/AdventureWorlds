@@ -43,7 +43,9 @@ class General extends CI_Model{
 
 
 
-        if ($res->num_rows() < 1) return array('display' => FALSE);
+        if ($res->num_rows() < 1) return array('display' => FALSE,
+                                               'juegos' => FALSE,
+                                               'total_scroll' => $this->General->total_scroll($busqueda));
         else {
             return array(
                 'display' => TRUE,

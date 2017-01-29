@@ -56,9 +56,9 @@ header h1, header h2 {
 }
 
 header > a:nth-of-type(3):hover {
-    transform: scale(1.1,1.1);
-    -webkit-transform: scale(1.1,1.1);
-    -ms-transform: scale(1.1,1.1);
+    transform: scale(1.05,1.05);
+    -webkit-transform: scale(1.05,1.05);
+    -ms-transform: scale(1.05,1.05);
 }
 
 #contenido h2, #contenido h3, #contenido h4 {
