@@ -1,8 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-include('libgv-php5/gv.php');
-include('/home/mariosumd/pear/share/pear/Image/GraphViz.php');
+include('K:\wamp64\bin\php\php5.6.25\gv.php');
+include('K:\wamp64\bin\php\php5.6.25\pear\Image\GraphViz.php');
 
 class Creadores extends CI_Controller {
 
@@ -235,8 +235,6 @@ class Creadores extends CI_Controller {
     }
 
     public function mapa($id_juego) {
-        //$id_juego = $this->input->post('id_juego');
-        $nombre   = $this->Creador->nombre_juego($id_juego);
         $fichas   = $this->Creador->cargar_juego($id_juego);
 
         $gv = new Image_GraphViz();
@@ -248,6 +246,7 @@ class Creadores extends CI_Controller {
                 $gv->addEdge(array($ficha['titulo'] => $ficha['siguiente2']));
             }
         }
-        $content = $gv->image('pdf');
+
+        $gv->image('pdf');
     }
 }
