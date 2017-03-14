@@ -1,5 +1,5 @@
 # Adventure Worlds
-## Proyecto de DAW 2016
+Proyecto de DAW 2016
 
 # CodeIgniter Composer Installer
 
